@@ -1,0 +1,1484 @@
+{
+  "schemaVersion": 1,
+  "collectedUtc": "2026-10-15T12:23:57.2296922Z",
+  "collector": "scripts/Get-KmldEnvironment.ps1",
+  "host": {
+    "computerName": "<redacted; see private manifest>",
+    "hostId": "c97c29c7a71b",
+    "os": {
+      "caption": "Microsoft Windows 10 Pro",
+      "version": "10.0.19045",
+      "build": "19045",
+      "architecture": "64-bit"
+    },
+    "cpu": [
+      {
+        "name": "AMD RYZEN AI MAX 385 w/ Radeon 8050S",
+        "cores": 8,
+        "logicalProcessors": 16
+      }
+    ],
+    "installedRamBytes": 33982058496,
+    "availableRamBytesAtCollection": 11031748608,
+    "committedBytesAtCollection": 31194345472,
+    "commitLimitBytes": 70489280512,
+    "pagefiles": [
+      {
+        "name": "C:\\pagefile.sys",
+        "allocatedMiB": 34816,
+        "currentUsageMiB": 340
+      }
+    ],
+    "captureDisk": {
+      "drive": "C:",
+      "sizeBytes": 1023037927424,
+      "freeBytes": 518476701696
+    },
+    "gpus": [
+      {
+        "name": "AMD Radeon(TM) 8050S Graphics",
+        "driverVersion": "32.0.31041.1004",
+        "driverDate": "2026-08-16",
+        "adapterRamBytesWmi": 4293918720,
+        "adapterRamNote": "Win32_VideoController.AdapterRAM is a 32-bit field and unreliable above 4 GiB",
+        "currentResolution": "3840x2160",
+        "refreshHz": 30
+      },
+      {
+        "name": "Microsoft Remote Display Adapter",
+        "driverVersion": "10.0.19041.5794",
+        "driverDate": "2006-06-20",
+        "adapterRamBytesWmi": null,
+        "adapterRamNote": "Win32_VideoController.AdapterRAM is a 32-bit field and unreliable above 4 GiB",
+        "currentResolution": "1920x1200",
+        "refreshHz": 32
+      }
+    ]
+  },
+  "game": {
+    "root": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Pathfinder Kingmaker",
+    "steam": {
+      "appId": 640820,
+      "name": "Pathfinder: Kingmaker",
+      "buildId": "6757524",
+      "targetBuildId": "6757524",
+      "stateFlags": "4",
+      "autoUpdateBehavior": "0",
+      "lastUpdatedUnix": "1788396695",
+      "sizeOnDisk": "42373430141"
+    },
+    "versionInfo": "2021-May-25 14:14 a7e887a561dd745cb5910fc4001cbe397f0f77b8",
+    "versionInfoNote": "Owlcat build stamp (date + source commit). The marketing version (e.g. 2.1.7b) is read from the game log line \"Game version\"; see ENVIRONMENT.md.",
+    "lastLogObservations": {
+      "source": "output_log.txt from the most recent launch (read-only)",
+      "logLastWriteUtc": "2026-10-14T06:44:42.0354921Z",
+      "unityEngineLine": "Initialize engine version: 2018.4.10f1 (a0470569e97b)",
+      "rendererLines": [
+        "Version:  Direct3D 11.0 [level 11.1]",
+        "Renderer: AMD Radeon(TM) 8050S Graphics (ID=0x1586)",
+        "VRAM:     32592 MB",
+        "Driver:   32.0.31041.1004"
+      ],
+      "ummVersionLine": "[Manager] Version: 0.33.0.0.",
+      "gameVersionLine": "[Manager] Start parsing game version."
+    },
+    "coreFiles": [
+      {
+        "relativePath": "Kingmaker.exe",
+        "bytes": 650752,
+        "lastWriteUtc": "2026-09-03T00:44:01.6918982Z",
+        "sha256": "94a779c5423199fcb0470bd89884a3b3875dee2072eb1a7b1d7bc8e67accb1a1",
+        "fileVersion": "2018.4.10.10503941",
+        "productVersion": "2018.4.10.10503941",
+        "peMachine": "Amd64"
+      },
+      {
+        "relativePath": "UnityPlayer.dll",
+        "bytes": 22950856,
+        "lastWriteUtc": "2026-09-03T00:44:03.7466570Z",
+        "sha256": "537ff99bdab94b6063fde539c55fdc12c8eb3bab3de7f29ddc10d24cf1dcefb7",
+        "fileVersion": "2018.4.10.10503941",
+        "productVersion": "2018.4.10.10503941",
+        "peMachine": "Amd64"
+      },
+      {
+        "relativePath": "UnityCrashHandler64.exe",
+        "bytes": 1460680,
+        "lastWriteUtc": "2026-09-03T00:44:03.7466570Z",
+        "sha256": "864c0ca09e0953c61f072a2d5dd5c3e12e29babd04e69c2cca10dc7f5f6c1ea7",
+        "fileVersion": null,
+        "productVersion": null,
+        "peMachine": "Amd64"
+      },
+      {
+        "relativePath": "winhttp.dll",
+        "bytes": 26112,
+        "lastWriteUtc": "2026-09-06T02:14:44.1542344Z",
+        "sha256": "8c6cdbc38836dee87e3368f5de1994d7c0ccebf29e4ce7aba3c0981f9375412c",
+        "fileVersion": "4.5.0.0",
+        "productVersion": "4.5.0",
+        "peMachine": "Amd64"
+      },
+      {
+        "relativePath": "doorstop_config.ini",
+        "bytes": 103,
+        "lastWriteUtc": "2026-09-06T02:15:17.0750871Z",
+        "sha256": "ba2b102a596ac7da571bbf5f22af49abdaac517b35d67a7da759371be309c9f4",
+        "fileVersion": null,
+        "productVersion": null
+      },
+      {
+        "relativePath": "MonoBleedingEdge\\EmbedRuntime\\mono-2.0-bdwgc.dll",
+        "bytes": 4946376,
+        "lastWriteUtc": "2026-09-03T00:44:03.7466570Z",
+        "sha256": "9dde653c0eda16e02441437e64faa058cda6c5c8c82a193b17895249b2099534",
+        "fileVersion": null,
+        "productVersion": null,
+        "peMachine": "Amd64"
+      },
+      {
+        "relativePath": "MonoBleedingEdge\\EmbedRuntime\\MonoPosixHelper.dll",
+        "bytes": 781312,
+        "lastWriteUtc": "2026-09-03T00:44:03.7466570Z",
+        "sha256": "fe66f15c2c2c421f09be094538ef18f6221622250c6bfaf228772942bd72ef6f",
+        "fileVersion": null,
+        "productVersion": null,
+        "peMachine": "Amd64"
+      },
+      {
+        "relativePath": "Galaxy64.dll",
+        "bytes": 13445632,
+        "lastWriteUtc": "2026-09-03T00:44:01.6918982Z",
+        "sha256": "92de45a27994f4ade1927482c7c566ff1360053fa1f4781dde14431164168267",
+        "fileVersion": "1.124.0.0",
+        "productVersion": "1.124.0.0",
+        "peMachine": "Amd64"
+      },
+      {
+        "relativePath": "GalaxyCSharpGlue.dll",
+        "bytes": 1465856,
+        "lastWriteUtc": "2026-09-03T00:44:01.6918982Z",
+        "sha256": "cf18c6e076ce31463dbd8252f85728d74a22ace97c0d1cda041a9a3222b25997",
+        "fileVersion": "1.124.0.0",
+        "productVersion": "1.124.0.0",
+        "peMachine": "Amd64"
+      },
+      {
+        "relativePath": "WinPixEventRuntime.dll",
+        "bytes": 42704,
+        "lastWriteUtc": "2026-09-03T00:50:50.5823166Z",
+        "sha256": "2f84a7583f08064f55ac9ea3426f898e1bef6f408fecee22c1f5567601e70123",
+        "fileVersion": "1.0.1701.26001",
+        "productVersion": "1.0.170126001",
+        "peMachine": "Amd64"
+      },
+      {
+        "relativePath": "Kingmaker_Data\\StreamingAssets\\Version.info",
+        "bytes": 58,
+        "lastWriteUtc": "2026-09-03T00:50:50.6173826Z",
+        "sha256": "a442f8a2aa8147e11d498494d4b49592a86c23e250befb7e4fe5108705a85639",
+        "fileVersion": null,
+        "productVersion": null
+      }
+    ],
+    "executableArchitecture": "Amd64",
+    "monoRuntime": {
+      "file": "MonoBleedingEdge\\EmbedRuntime\\mono-2.0-bdwgc.dll",
+      "gcFamily": "bdwgc (Boehm-Demers-Weiser, non-moving) by file name; behaviour not otherwise verified"
+    },
+    "digitalRewardsDirs": [],
+    "keyManagedAssemblies": [
+      {
+        "relativePath": "Kingmaker_Data\\Managed\\Assembly-CSharp-firstpass.dll",
+        "bytes": 3867136,
+        "lastWriteUtc": "2026-09-03T00:44:01.7791854Z",
+        "sha256": "069a7362ce5e3ccd597206174aec13743c2db5a1bfbc2a42f15a5fbd1ea30d30",
+        "fileVersion": "0.0.0.0",
+        "productVersion": "0.0.0.0",
+        "assembly": {
+          "name": "Assembly-CSharp-firstpass",
+          "assemblyVersion": "0.0.0.0",
+          "mvid": "57f03756-55de-42f5-8bb3-e983306082b2",
+          "metadataVersion": "v4.0.30319"
+        },
+        "peMachine": "I386"
+      },
+      {
+        "relativePath": "Kingmaker_Data\\Managed\\Assembly-CSharp.dll",
+        "bytes": 7262208,
+        "lastWriteUtc": "2026-09-03T00:44:01.7791854Z",
+        "sha256": "3b6450ffec440e296e586f71c711b195aed144b28d53e1cbb29406d18fef5afb",
+        "fileVersion": "0.0.0.0",
+        "productVersion": "0.0.0.0",
+        "assembly": {
+          "name": "Assembly-CSharp",
+          "assemblyVersion": "0.0.0.0",
+          "mvid": "07fa1e4d-8618-41b3-9b8d-faa17d3b26f7",
+          "metadataVersion": "v4.0.30319"
+        },
+        "peMachine": "I386"
+      },
+      {
+        "relativePath": "Kingmaker_Data\\Managed\\mscorlib.dll",
+        "bytes": 4069888,
+        "lastWriteUtc": "2026-09-03T00:44:01.7791854Z",
+        "sha256": "e6875b3f6d3e681da2fbd11b1077c5550305fb4654eada1113736a08929227e9",
+        "fileVersion": "4.6.57.0",
+        "productVersion": "4.6.57.0",
+        "assembly": {
+          "name": "mscorlib",
+          "assemblyVersion": "4.0.0.0",
+          "mvid": "7ba07f08-8431-485b-b722-f3b3373e87ee",
+          "metadataVersion": "v4.0.30319"
+        },
+        "peMachine": "I386"
+      },
+      {
+        "relativePath": "Kingmaker_Data\\Managed\\UniRx.dll",
+        "bytes": 420352,
+        "lastWriteUtc": "2026-09-03T00:44:01.7791854Z",
+        "sha256": "bfee7eca22156d8b95c149ba1383f065124b7b44a62ed4eafc32a5e67f6bc68a",
+        "fileVersion": "0.0.0.0",
+        "productVersion": "0.0.0.0",
+        "assembly": {
+          "name": "UniRx",
+          "assemblyVersion": "0.0.0.0",
+          "mvid": "40cbbc24-b3ca-4ec5-a257-546f2dffd396",
+          "metadataVersion": "v4.0.30319"
+        },
+        "peMachine": "I386"
+      },
+      {
+        "relativePath": "Kingmaker_Data\\Managed\\UnityEngine.CoreModule.dll",
+        "bytes": 848896,
+        "lastWriteUtc": "2026-09-03T00:44:01.7791854Z",
+        "sha256": "3a76df7f709d465e3273502e08edbffb536b1c2f78c3a132b8668e59fddd2803",
+        "fileVersion": "0.0.0.0",
+        "productVersion": " ",
+        "assembly": {
+          "name": "UnityEngine.CoreModule",
+          "assemblyVersion": "0.0.0.0",
+          "mvid": "bd5ffe06-494e-4588-a068-c8443cc48c47",
+          "metadataVersion": "v2.0.50727"
+        },
+        "peMachine": "I386"
+      },
+      {
+        "relativePath": "Kingmaker_Data\\Managed\\UnityEngine.dll",
+        "bytes": 72192,
+        "lastWriteUtc": "2026-09-03T00:44:09.8057528Z",
+        "sha256": "50b79c57f46bf4e060bb27461b6d4fac6f078e08b57e776c7a811554c4899fd6",
+        "fileVersion": "0.0.0.0",
+        "productVersion": " ",
+        "assembly": {
+          "name": "UnityEngine",
+          "assemblyVersion": "0.0.0.0",
+          "mvid": "afe31ffb-964f-4d62-9811-80e55deeccc4",
+          "metadataVersion": "v4.0.30319"
+        },
+        "peMachine": "I386"
+      },
+      {
+        "relativePath": "Kingmaker_Data\\Managed\\UnityEngine.UI.dll",
+        "bytes": 252928,
+        "lastWriteUtc": "2026-09-03T00:44:09.9249121Z",
+        "sha256": "4dee942e8974492511733e5482f89fde39e3964008f072ec9c12d05e40a9080d",
+        "fileVersion": "1.0.0.0",
+        "productVersion": "1.0.0.0",
+        "assembly": {
+          "name": "UnityEngine.UI",
+          "assemblyVersion": "1.0.0.0",
+          "mvid": "2d028325-c478-4385-91de-2ab708b546bc",
+          "metadataVersion": "v2.0.50727"
+        },
+        "peMachine": "I386"
+      }
+    ],
+    "managedAssemblyCount": 109,
+    "managedSetSha256": "2725eff25fb013394e09251398977d79f4830fe09ed62ed7db455d2b6be1e5b5",
+    "loader": {
+      "injection": "Doorstop proxy (winhttp.dll) with doorstop_config.ini",
+      "doorstopConfig": "[General]\nenabled = true\ntarget_assembly = Kingmaker_Data\\Managed\\UnityModManager\\UnityModManager.dll",
+      "files": [
+        {
+          "relativePath": "Kingmaker_Data\\Managed\\UnityModManager\\0Harmony-1.2.dll",
+          "bytes": 104448,
+          "lastWriteUtc": "2026-09-06T02:14:44.2795629Z",
+          "sha256": "e6bf807993cace95c4c45d126fe2f85a10346bec4f3ee589cb7e63138072312d",
+          "fileVersion": "1.2.0.1",
+          "productVersion": "1.2.0.1",
+          "assembly": {
+            "name": "0Harmony-1.2",
+            "assemblyVersion": "1.2.0.1",
+            "mvid": "918c071f-383e-46dc-a374-6879300cbe15",
+            "metadataVersion": "v2.0.50727"
+          },
+          "peMachine": "I386"
+        },
+        {
+          "relativePath": "Kingmaker_Data\\Managed\\UnityModManager\\0Harmony.dll",
+          "bytes": 2219008,
+          "lastWriteUtc": "2026-09-06T02:14:41.9800437Z",
+          "sha256": "df043f05c6e43602fa8e8f38f52a3a2cf962aab7a65a9d85573ea25f01a63e80",
+          "fileVersion": "2.3.6.0",
+          "productVersion": "2.3.6.0+f41da7608c5c3e9c7bf16551462b14c0b5392db3",
+          "assembly": {
+            "name": "0Harmony",
+            "assemblyVersion": "2.3.6.0",
+            "mvid": "4dbb7cd6-acb5-43ef-8d7e-6fc104af5bdc",
+            "metadataVersion": "v4.0.30319"
+          },
+          "peMachine": "I386"
+        },
+        {
+          "relativePath": "Kingmaker_Data\\Managed\\UnityModManager\\0Harmony12.dll",
+          "bytes": 102400,
+          "lastWriteUtc": "2026-09-06T02:14:44.3497460Z",
+          "sha256": "aa1cd48317254985d8b700cc74953477d1b40c3022ce9aa4c95ed2b8327e1292",
+          "fileVersion": "1.2.0.1",
+          "productVersion": "1.2.0.1",
+          "assembly": {
+            "name": "0Harmony12",
+            "assemblyVersion": "1.2.0.1",
+            "mvid": "918c071f-383e-46dc-a374-6879300cbe15",
+            "metadataVersion": "v2.0.50727"
+          },
+          "peMachine": "I386"
+        },
+        {
+          "relativePath": "Kingmaker_Data\\Managed\\UnityModManager\\Config.xml",
+          "bytes": 844,
+          "lastWriteUtc": "2026-09-06T02:15:17.0971193Z",
+          "sha256": "12d1609e57ac027e1635df01b3af41318b9c8685e2f7a262cb504542288466a1",
+          "fileVersion": null,
+          "productVersion": null
+        },
+        {
+          "relativePath": "Kingmaker_Data\\Managed\\UnityModManager\\dnlib.dll",
+          "bytes": 1136128,
+          "lastWriteUtc": "2026-09-06T02:14:42.6972906Z",
+          "sha256": "54c7968cfbdda0e9fddfa0f844d2dbef3bb3a5a4d2d7462d5413eac3fd0614ca",
+          "fileVersion": "3.1.0.0",
+          "productVersion": "3.1.0+83b4eaa999fab374f28697c8900d51a60a366658",
+          "assembly": {
+            "name": "dnlib",
+            "assemblyVersion": "3.1.0.0",
+            "mvid": "d3a91664-46e7-4d2f-a209-48e1caf8e5bc",
+            "metadataVersion": "v2.0.50727"
+          },
+          "peMachine": "I386"
+        },
+        {
+          "relativePath": "Kingmaker_Data\\Managed\\UnityModManager\\Log.txt",
+          "bytes": 836067,
+          "lastWriteUtc": "2026-10-14T06:44:42.0394917Z",
+          "sha256": "c8fd543810d448a21a6a203f3618effc2a30704e1a53d90a39682e31041a837f",
+          "fileVersion": null,
+          "productVersion": null
+        },
+        {
+          "relativePath": "Kingmaker_Data\\Managed\\UnityModManager\\Params.xml",
+          "bytes": 3077,
+          "lastWriteUtc": "2026-10-14T06:44:41.9824217Z",
+          "sha256": "579f8db8ffc29e3ffd17c10cf888524cbfe9cf4db88902185ce7516831a3a3ea",
+          "fileVersion": null,
+          "productVersion": null
+        },
+        {
+          "relativePath": "Kingmaker_Data\\Managed\\UnityModManager\\UnityModManager.dll",
+          "bytes": 204800,
+          "lastWriteUtc": "2026-09-06T02:14:43.4282826Z",
+          "sha256": "63e5baf7b1738e4091b5fd17ccb738ecdb4d1dbf246061dfd55dc52835d52691",
+          "fileVersion": "0.33.0",
+          "productVersion": "0.33.0+470d310a367393cd1d0b6b78021304346c5e13ae",
+          "assembly": {
+            "name": "UnityModManager",
+            "assemblyVersion": "0.33.0.0",
+            "mvid": "54059519-2754-445a-b5ee-fdb9326336e2",
+            "metadataVersion": "v2.0.50727"
+          },
+          "peMachine": "I386"
+        },
+        {
+          "relativePath": "Kingmaker_Data\\Managed\\UnityModManager\\UnityModManager.xml",
+          "bytes": 46099,
+          "lastWriteUtc": "2026-09-06T02:14:44.0705749Z",
+          "sha256": "17f3935444d3fa6d95f3754c522062a8a510bbf5682a659c35e1e0c2248c7ba8",
+          "fileVersion": null,
+          "productVersion": null
+        }
+      ],
+      "params": {
+        "checkUpdates": "1",
+        "showOnStart": "1",
+        "mods": [
+          {
+            "id": "BagOfTricks",
+            "enabled": "true"
+          },
+          {
+            "id": "BetterVendors",
+            "enabled": "true"
+          },
+          {
+            "id": "CallOfTheWild",
+            "enabled": "true"
+          },
+          {
+            "id": "CheatMenu",
+            "enabled": "true"
+          },
+          {
+            "id": "CraftMagicItems",
+            "enabled": "true"
+          },
+          {
+            "id": "EddicKingmakerRespec",
+            "enabled": "true"
+          },
+          {
+            "id": "KingmakerBuffPlanner",
+            "enabled": "true"
+          },
+          {
+            "id": "KingmakerBugfixes",
+            "enabled": "true"
+          },
+          {
+            "id": "KingmakerDiceRoller",
+            "enabled": "true"
+          },
+          {
+            "id": "KingmakerGunslinger",
+            "enabled": "true"
+          },
+          {
+            "id": "KingmakerLastAzlantiPreserver",
+            "enabled": "true"
+          },
+          {
+            "id": "ProperFlanking2",
+            "enabled": "true"
+          },
+          {
+            "id": "RacesUnleashed",
+            "enabled": "true"
+          },
+          {
+            "id": "SkipIntro",
+            "enabled": "true"
+          },
+          {
+            "id": "TweakOrTreat",
+            "enabled": "true"
+          },
+          {
+            "id": "ZFavoredClass",
+            "enabled": "true"
+          }
+        ]
+      },
+      "assemblyCSharpModifiedByLoader": "not determined by hash alone (no pristine depot hash available offline); Doorstop injection does not require rewriting Assembly-CSharp. See ENVIRONMENT.md."
+    },
+    "mods": [
+      {
+        "folder": "BagOfTricks",
+        "Id": "BagOfTricks",
+        "DisplayName": "Bag of Tricks - Cheats and Tools",
+        "Version": "1.16.4",
+        "EntryMethod": "BagOfTricks.Main.Load",
+        "ManagerVersion": "0.22.0",
+        "HomePage": "https://www.nexusmods.com/pathfinderkingmaker/mods/26",
+        "fileCount": 40,
+        "totalBytes": 1805726.0,
+        "configFiles": [
+          {
+            "relativePath": "Mods\\BagOfTricks\\Characters\\Example.txt",
+            "bytes": 1362,
+            "sha256": "b9be3a22b67eacd550cf3e00236eb3f66db9443e2a6150617185797d017fc312",
+            "lastWriteUtc": "2026-09-06T17:16:33.8768478Z"
+          },
+          {
+            "relativePath": "Mods\\BagOfTricks\\Localisation\\English.xml",
+            "bytes": 108163,
+            "sha256": "250f898a0fecd5aafb7d61b6af0c3991dcfc61bff8c6f01fd56d9abab55a603e",
+            "lastWriteUtc": "2026-09-06T17:16:33.8884368Z"
+          },
+          {
+            "relativePath": "Mods\\BagOfTricks\\Localisation\\French.xml",
+            "bytes": 68547,
+            "sha256": "0cad13cd487494a16e6271f6616a1868ab25a5ee523190ec84e6cba1cb66fc8b",
+            "lastWriteUtc": "2026-09-06T17:16:33.8884368Z"
+          },
+          {
+            "relativePath": "Mods\\BagOfTricks\\Localisation\\German_MachineTranslation.xml",
+            "bytes": 119612,
+            "sha256": "41485de99ab0019b460f4ed859ac1663d5c9dbadb49ef21ee77b68c30f9bfe68",
+            "lastWriteUtc": "2026-09-06T17:16:33.8894169Z"
+          },
+          {
+            "relativePath": "Mods\\BagOfTricks\\Localisation\\Russian.xml",
+            "bytes": 162605,
+            "sha256": "50b30d532bc114167dc848e7c4ed53466d4cdf79dcf09cb77e60b91dcd17b730",
+            "lastWriteUtc": "2026-09-06T17:16:33.8914221Z"
+          },
+          {
+            "relativePath": "Mods\\BagOfTricks\\ModifiedBlueprints\\Example ArmourType.json",
+            "bytes": 182,
+            "sha256": "2ccec88c1a20b28e981151f748037f698b55c5acd7d004ea24547d779aa3bd47",
+            "lastWriteUtc": "2026-09-06T17:16:33.8914221Z"
+          },
+          {
+            "relativePath": "Mods\\BagOfTricks\\ModifiedBlueprints\\Example EnchantableEquipment.json",
+            "bytes": 135,
+            "sha256": "e20882834918fd9dc70558d262a2bae36f69b271ac5874291248d8edc90a0f0a",
+            "lastWriteUtc": "2026-09-06T17:16:33.8924246Z"
+          },
+          {
+            "relativePath": "Mods\\BagOfTricks\\ModifiedBlueprints\\Example Item.json",
+            "bytes": 39,
+            "sha256": "a5f438543ca078627080c52eae695984ffdd0f359208330bfa704f8506a8268e",
+            "lastWriteUtc": "2026-09-06T17:16:33.8924246Z"
+          },
+          {
+            "relativePath": "Mods\\BagOfTricks\\ModifiedBlueprints\\Example ItemWeapon.json",
+            "bytes": 370,
+            "sha256": "ebe54a67fe5f35ed39438656a8c84534d5719dccbfc61053d9baafcb5bf0ed7e",
+            "lastWriteUtc": "2026-09-06T17:16:33.8934272Z"
+          },
+          {
+            "relativePath": "Mods\\BagOfTricks\\ModifiedBlueprints\\Example WeaponType.json",
+            "bytes": 432,
+            "sha256": "3178e664977b8462783c6ec796d6ca34e7f7d858bddffe3822611673b3d94323",
+            "lastWriteUtc": "2026-09-06T17:16:33.8934272Z"
+          },
+          {
+            "relativePath": "Mods\\BagOfTricks\\Settings.xml",
+            "bytes": 38794,
+            "sha256": "37349d1117a70855e8e02663c82d7ca7ba4c3114d205531f78ce8cc1428bdaba",
+            "lastWriteUtc": "2026-10-08T23:24:19.2623927Z"
+          }
+        ]
+      },
+      {
+        "folder": "BetterVendors",
+        "Id": "BetterVendors",
+        "DisplayName": "Better Vendors",
+        "Version": "2.0.8",
+        "EntryMethod": "BetterVendors.Main.Load",
+        "ManagerVersion": "0.22.9",
+        "fileCount": 5,
+        "totalBytes": 436271.0,
+        "configFiles": [
+          {
+            "relativePath": "Mods\\BetterVendors\\loaded_blueprints.txt",
+            "bytes": 14853,
+            "sha256": "e0e3d23f43738cc75c5746f72aa321d5af9dde88d2aa5a05323a5c81d68e00f1",
+            "lastWriteUtc": "2026-10-08T23:23:39.5156517Z"
+          },
+          {
+            "relativePath": "Mods\\BetterVendors\\Settings.xml",
+            "bytes": 3337,
+            "sha256": "dbc24dfa36598d82a1023ed60aedf3c6d8a6e759f51e7756fc4f8e8834646bee",
+            "lastWriteUtc": "2026-10-08T23:24:19.2693946Z"
+          }
+        ]
+      },
+      {
+        "folder": "CallOfTheWild",
+        "Id": "CallOfTheWild",
+        "DisplayName": "Call of the wild",
+        "Version": "1.14.4c-2.1",
+        "AssemblyName": "CallOfTheWild.dll",
+        "EntryMethod": "CallOfTheWild.Main.Load",
+        "ManagerVersion": "0.13.0",
+        "Requirements": [],
+        "HomePage": "https://www.nexusmods.com/pathfinderkingmaker/mods/112",
+        "fileCount": 266,
+        "totalBytes": 66186003.0,
+        "assembly": {
+          "relativePath": "Mods\\CallOfTheWild\\CallOfTheWild.dll",
+          "bytes": 7935488,
+          "lastWriteUtc": "2026-09-06T17:16:35.9236117Z",
+          "sha256": "4ebf8e1ed3e66ffed72ea33ea325595629423dacd5bffa23e3c9109144b26915",
+          "fileVersion": "1.0.0.0",
+          "productVersion": "1.0.0.0",
+          "assembly": {
+            "name": "CallOfTheWild",
+            "assemblyVersion": "1.0.0.0",
+            "mvid": "8caab254-aacf-4811-8093-44b9184e6e53",
+            "metadataVersion": "v4.0.30319"
+          },
+          "peMachine": "I386"
+        },
+        "configFiles": [
+          {
+            "relativePath": "Mods\\CallOfTheWild\\blueprints.txt",
+            "bytes": 2987468,
+            "sha256": "f227b1c302dc8db9773de483369407ecc4a154b4082d83c97fcfe0c65912a4f4",
+            "lastWriteUtc": "2026-09-06T17:16:35.8804990Z"
+          },
+          {
+            "relativePath": "Mods\\CallOfTheWild\\HarmlessSpells\\harmless_fort_saves.txt",
+            "bytes": 1883,
+            "sha256": "f01450dcc8001599679eea0d29f24d55153716c8b5a9e47fece4b8c7cf7f010e",
+            "lastWriteUtc": "2026-09-06T17:16:35.9256176Z"
+          },
+          {
+            "relativePath": "Mods\\CallOfTheWild\\HarmlessSpells\\harmless_will_saves.txt",
+            "bytes": 5180,
+            "sha256": "39cbd550c01d7e94533bf86ea96a1c113b8c53d2d3627c2287f3f8f1a0cd6651",
+            "lastWriteUtc": "2026-09-06T17:16:35.9256176Z"
+          },
+          {
+            "relativePath": "Mods\\CallOfTheWild\\HarmlessSpells\\heal_will_saves.txt",
+            "bytes": 1055,
+            "sha256": "47dfdde03ac74ab515c621e18c09ce1aae3e1316709835e98e4b00c40fd23986",
+            "lastWriteUtc": "2026-09-06T17:16:35.9266194Z"
+          },
+          {
+            "relativePath": "Mods\\CallOfTheWild\\loaded_blueprints.txt",
+            "bytes": 2992110,
+            "sha256": "55db70b95cd666530ddc803a5c43d8bf9e996d38ad88bdc6b25da790bf3401c7",
+            "lastWriteUtc": "2026-10-08T23:23:55.4708722Z"
+          },
+          {
+            "relativePath": "Mods\\CallOfTheWild\\settings.json",
+            "bytes": 689,
+            "sha256": "24cc3f80269992a53ebbfd1f5986e5aab056841d6b2f43d8e22e764cdb73f6e8",
+            "lastWriteUtc": "2026-09-06T17:16:36.2677069Z"
+          },
+          {
+            "relativePath": "Mods\\CallOfTheWild\\WishBlackLists\\miracle_black_list.txt",
+            "bytes": 17870,
+            "sha256": "47ee58c2317e89ba7d601738e6a374295e754d2cb110a9dfcb3dc7137c42549b",
+            "lastWriteUtc": "2026-09-06T17:16:36.2677069Z"
+          }
+        ]
+      },
+      {
+        "folder": "CheatMenu",
+        "Id": "CheatMenu",
+        "DisplayName": "Cheat Menu",
+        "Version": "1.2.3",
+        "EntryMethod": "CheatMenu.Main.Load",
+        "ManagerVersion": "0.12.0",
+        "GameVersion": "2.1.0",
+        "HomePage": "https://www.nexusmods.com/pathfinderkingmaker/mods/29",
+        "fileCount": 3,
+        "totalBytes": 30594.0,
+        "configFiles": []
+      },
+      {
+        "folder": "CraftMagicItems",
+        "Id": "CraftMagicItems",
+        "DisplayName": "Craft Magic Items",
+        "Version": "2.1.0",
+        "EntryMethod": "CraftMagicItems.Main.Load",
+        "ManagerVersion": "0.22.9",
+        "HomePage": "https://www.nexusmods.com/pathfinderkingmaker/mods/54",
+        "fileCount": 21,
+        "totalBytes": 675776.0,
+        "configFiles": [
+          {
+            "relativePath": "Mods\\CraftMagicItems\\Data\\ArmsArmorRecipes.json",
+            "bytes": 34697,
+            "sha256": "72dc4a42cbf23f76705a86d9ff2aa0cfde9295cee31255db5c112ade345d9ff2",
+            "lastWriteUtc": "2026-09-06T17:16:37.8643266Z"
+          },
+          {
+            "relativePath": "Mods\\CraftMagicItems\\Data\\CommonRecipes.json",
+            "bytes": 21500,
+            "sha256": "882e3ed8bd883deed5de678a2e387d686bd4254ddcfbd393237e2248864ae87e",
+            "lastWriteUtc": "2026-09-06T17:16:37.8643266Z"
+          },
+          {
+            "relativePath": "Mods\\CraftMagicItems\\Data\\ItemTypes.json",
+            "bytes": 14178,
+            "sha256": "c7cf87e61beb8025439232d509ad95c6d3891b7a64199b8006cea9b6bd28537e",
+            "lastWriteUtc": "2026-09-06T17:16:37.8653292Z"
+          },
+          {
+            "relativePath": "Mods\\CraftMagicItems\\Data\\LootItems.json",
+            "bytes": 3186,
+            "sha256": "0138d973f2011529f736083c80844ab323c468e62fe1a1b87a796af2a948335e",
+            "lastWriteUtc": "2026-09-06T17:16:37.8653292Z"
+          },
+          {
+            "relativePath": "Mods\\CraftMagicItems\\Data\\MundaneRecipes.json",
+            "bytes": 19495,
+            "sha256": "1ea55912fdab4871fe6b167b9447d0475c1a9b042573b9db2d7244f589af7e15",
+            "lastWriteUtc": "2026-09-06T17:16:37.8663324Z"
+          },
+          {
+            "relativePath": "Mods\\CraftMagicItems\\Data\\RingRecipes.json",
+            "bytes": 6283,
+            "sha256": "996eb6dfae6724980c0208f91463f0e093ffbaaf505d6c5411fd6a0c6e4302fd",
+            "lastWriteUtc": "2026-09-06T17:16:37.8663324Z"
+          },
+          {
+            "relativePath": "Mods\\CraftMagicItems\\Data\\RodRecipes.json",
+            "bytes": 18174,
+            "sha256": "40e2b52b9808c2ef49d091c6f9b542f26551dda27950d9cb88bc0a5155562e22",
+            "lastWriteUtc": "2026-09-06T17:16:37.8663324Z"
+          },
+          {
+            "relativePath": "Mods\\CraftMagicItems\\Data\\WondrousRecipes.json",
+            "bytes": 52775,
+            "sha256": "17fc89709fb962ce3426eaa41a60af3b406c05c5dda9a0793e7f9a42ff1eae52",
+            "lastWriteUtc": "2026-09-06T17:16:37.8673351Z"
+          },
+          {
+            "relativePath": "Mods\\CraftMagicItems\\L10n\\README.txt",
+            "bytes": 316,
+            "sha256": "9d3a952ca3d76d8560a408024fcd7babdf9469612a531d8fcde7b1c73b39b3ff",
+            "lastWriteUtc": "2026-09-06T17:16:37.8713462Z"
+          },
+          {
+            "relativePath": "Mods\\CraftMagicItems\\L10n\\Strings_enGB.json",
+            "bytes": 23367,
+            "sha256": "e3b83a4920d0a3558a7ed7f6ca7aa262eef1a959954721079fb977dc916a1612",
+            "lastWriteUtc": "2026-09-06T17:16:37.8713462Z"
+          },
+          {
+            "relativePath": "Mods\\CraftMagicItems\\Settings.xml",
+            "bytes": 796,
+            "sha256": "de621e2b8a39b457e79671580e27a0814bf8aea3c8a51bc2f8532fb3c609649f",
+            "lastWriteUtc": "2026-10-08T23:24:19.2723930Z"
+          }
+        ]
+      },
+      {
+        "folder": "EddicKingmakerRespec",
+        "Id": "EddicKingmakerRespec",
+        "DisplayName": "EddicKingmakerRespec",
+        "Version": "1.0",
+        "AssemblyName": "EddicKingmakerRespec.dll",
+        "EntryMethod": "EddicKingmakerRespec.Main.Load",
+        "fileCount": 5,
+        "totalBytes": 32305.0,
+        "assembly": {
+          "relativePath": "Mods\\EddicKingmakerRespec\\EddicKingmakerRespec.dll",
+          "bytes": 14336,
+          "lastWriteUtc": "2026-09-07T00:00:52.6186637Z",
+          "sha256": "385c1ed87b5acb70092875ce28527cefb5698c64b61d3f706a27dc37161fc4d6",
+          "fileVersion": "1.0.0.0",
+          "productVersion": "1.0.0+b1bbd507e63345b2eecfdf2972d1cd8c50e281ad",
+          "assembly": {
+            "name": "EddicKingmakerRespec",
+            "assemblyVersion": "1.0.0.0",
+            "mvid": "be15b46a-80b0-417c-a62d-b3f6aea24c55",
+            "metadataVersion": "v4.0.30319"
+          },
+          "peMachine": "I386"
+        },
+        "configFiles": [
+          {
+            "relativePath": "Mods\\EddicKingmakerRespec\\Settings.xml",
+            "bytes": 250,
+            "sha256": "8949fd30d17a669a7f0fa8ff108956d4335243128b887ea7db1ca85d9bdc2c39",
+            "lastWriteUtc": "2026-10-08T23:24:19.2783925Z"
+          }
+        ]
+      },
+      {
+        "folder": "KingmakerBuffPlanner",
+        "Id": "KingmakerBuffPlanner",
+        "DisplayName": "Kingmaker Buff Planner",
+        "Version": "0.1.1-rc3",
+        "AssemblyName": "KingmakerBuffPlanner.dll",
+        "EntryMethod": "KingmakerBuffPlanner.Main.Load",
+        "ManagerVersion": "0.28.2",
+        "GameVersion": "2.1.7",
+        "Requirements": [],
+        "fileCount": 5,
+        "totalBytes": 1989015.0,
+        "assembly": {
+          "relativePath": "Mods\\KingmakerBuffPlanner\\KingmakerBuffPlanner.dll",
+          "bytes": 992768,
+          "lastWriteUtc": "2000-01-01T05:00:00.0000000Z",
+          "sha256": "78407dd4c7240ce25c7654715854e83061da744a18d8eb4a2198fdffec5e3080",
+          "fileVersion": "0.1.1.0",
+          "productVersion": "0.1.1-rc3",
+          "assembly": {
+            "name": "KingmakerBuffPlanner",
+            "assemblyVersion": "0.1.1.0",
+            "mvid": "c0cc9cbc-8075-4d98-a32e-29972aafa7fa",
+            "metadataVersion": "v4.0.30319"
+          },
+          "peMachine": "I386"
+        },
+        "configFiles": [
+          {
+            "relativePath": "Mods\\KingmakerBuffPlanner\\NativeEffectOverrides.json",
+            "bytes": 1914,
+            "sha256": "8f179550870167e3379c5e450312a99218ea5289573699797cb4c97f22b11b80",
+            "lastWriteUtc": "2000-01-01T05:00:00.0000000Z"
+          }
+        ]
+      },
+      {
+        "folder": "KingmakerBugfixes",
+        "Id": "KingmakerBugfixes",
+        "DisplayName": "Kingmaker Bugfixes",
+        "Version": "1.3.3",
+        "AssemblyName": "KingmakerBugfixes.dll",
+        "EntryMethod": "kmbf.Main.Load",
+        "ManagerVersion": "0.27.10",
+        "Requirements": [],
+        "HomePage": "https://github.com/KABoissonneault/KingmakerBugfixes",
+        "fileCount": 9,
+        "totalBytes": 572405.0,
+        "assembly": {
+          "relativePath": "Mods\\KingmakerBugfixes\\KingmakerBugfixes.dll",
+          "bytes": 214528,
+          "lastWriteUtc": "2026-09-06T17:20:06.1022684Z",
+          "sha256": "87888cbe4ca1b62e151560a8697bf07073dff4446a2e2bc522fac1804b63dca1",
+          "fileVersion": "1.3.3.0",
+          "productVersion": "1.3.3+929294e4d77bb40c6691103bcda45fc24929a616",
+          "assembly": {
+            "name": "KingmakerBugfixes",
+            "assemblyVersion": "1.3.3.0",
+            "mvid": "d327736d-f237-4de9-bffa-ff003a5a850a",
+            "metadataVersion": "v4.0.30319"
+          },
+          "peMachine": "I386"
+        },
+        "configFiles": [
+          {
+            "relativePath": "Mods\\KingmakerBugfixes\\Localization\\DefaultStrings_enGB.json",
+            "bytes": 2803,
+            "sha256": "3b77964140b9c15fbeec59528dbea01cfc25e5fc8d6f3a4073de81eea08e4aa3",
+            "lastWriteUtc": "2026-09-06T17:20:06.1032710Z"
+          },
+          {
+            "relativePath": "Mods\\KingmakerBugfixes\\Localization\\Strings_enGB.json",
+            "bytes": 2337,
+            "sha256": "add5193c14fec810c8662741bc9eada038d4cd2696034c6c3a5eba5548623530",
+            "lastWriteUtc": "2026-09-06T17:20:06.1042737Z"
+          },
+          {
+            "relativePath": "Mods\\KingmakerBugfixes\\Settings.xml",
+            "bytes": 1764,
+            "sha256": "c54e3b5c5d9f125d8bc5edd34a34dcb7a59f2ed4f8b81f08fa4ca37b70cf1ee4",
+            "lastWriteUtc": "2026-10-08T23:24:19.2833933Z"
+          }
+        ]
+      },
+      {
+        "folder": "KingmakerDiceRoller",
+        "Id": "KingmakerDiceRoller",
+        "DisplayName": "Kingmaker Dice Roller",
+        "Version": "0.1.6",
+        "AssemblyName": "KingmakerDiceRoller.dll",
+        "EntryMethod": "KingmakerDiceRoller.Main.Load",
+        "ManagerVersion": "0.32.0",
+        "GameVersion": "2.1.7",
+        "Requirements": [],
+        "fileCount": 8,
+        "totalBytes": 604063.0,
+        "assembly": {
+          "relativePath": "Mods\\KingmakerDiceRoller\\KingmakerDiceRoller.dll",
+          "bytes": 295936,
+          "lastWriteUtc": "2026-09-13T12:30:39.3045066Z",
+          "sha256": "e2803d3f70ac168d52de27a075b36e6562c7209e709d02c62485f7ded0b13092",
+          "fileVersion": "0.1.6.0",
+          "productVersion": "0.1.6",
+          "assembly": {
+            "name": "KingmakerDiceRoller",
+            "assemblyVersion": "0.1.6.0",
+            "mvid": "dc1469b2-c29d-481a-94eb-520d87e85479",
+            "metadataVersion": "v4.0.30319"
+          },
+          "peMachine": "I386"
+        },
+        "configFiles": [
+          {
+            "relativePath": "Mods\\KingmakerDiceRoller\\licenses\\UPSTREAM-WOTR-DICE-ROLLER-MIT.txt",
+            "bytes": 2149,
+            "sha256": "dbd880ec8d56aafd16ef373b651e10d5fbdb7405474258c024cb60a606187cc8",
+            "lastWriteUtc": "2026-09-13T12:30:39.3045066Z"
+          },
+          {
+            "relativePath": "Mods\\KingmakerDiceRoller\\Settings.xml",
+            "bytes": 405,
+            "sha256": "82b3586d69cd9db2eafda4c071f4c4586074ecab962f7dcdc1f784acc656db36",
+            "lastWriteUtc": "2026-10-08T23:24:19.2863955Z"
+          }
+        ]
+      },
+      {
+        "folder": "KingmakerGunslinger",
+        "Id": "KingmakerGunslinger",
+        "DisplayName": "Kingmaker Gunslinger",
+        "Version": "0.0.140",
+        "AssemblyName": "KingmakerGunslinger.dll",
+        "EntryMethod": "KingmakerGunslinger.Main.Load",
+        "ManagerVersion": "0.32.4",
+        "Requirements": [],
+        "fileCount": 254,
+        "totalBytes": 51571747.0,
+        "assembly": {
+          "relativePath": "Mods\\KingmakerGunslinger\\KingmakerGunslinger.dll",
+          "bytes": 10583552,
+          "lastWriteUtc": "2026-01-01T05:00:00.0000000Z",
+          "sha256": "00ef67570d30e4ff9c54a2ad2027393660436d5724bcee2bb99e4c5718e966fd",
+          "fileVersion": "0.0.140",
+          "productVersion": "0.0.140-favored-class-integration",
+          "assembly": {
+            "name": "KingmakerGunslinger",
+            "assemblyVersion": "0.0.140.0",
+            "mvid": "842d73db-a49f-459f-9b47-ca80cf0f273a",
+            "metadataVersion": "v4.0.30319"
+          },
+          "peMachine": "I386"
+        },
+        "configFiles": [
+          {
+            "relativePath": "Mods\\KingmakerGunslinger\\assets\\bundles\\asset-bundle-manifest.json",
+            "bytes": 9360,
+            "sha256": "b566364e31bae00f1d54037035cb7f82f92430aa94842b94e1edd4a8e7dc168f",
+            "lastWriteUtc": "2026-01-01T05:00:00.0000000Z"
+          },
+          {
+            "relativePath": "Mods\\KingmakerGunslinger\\assets\\icons\\expanded-summoning\\icon-manifest.json",
+            "bytes": 37019,
+            "sha256": "7ace21de73a63feb625842f4e3cc9ba6cf3f1a413ff39c1c004c63b6bb2f33da",
+            "lastWriteUtc": "2026-01-01T05:00:00.0000000Z"
+          },
+          {
+            "relativePath": "Mods\\KingmakerGunslinger\\assets\\pteranodon\\pteranodon-mesh.json",
+            "bytes": 79181,
+            "sha256": "cc80e28589f5644c86e870c672cd8f188312920f7092cacbd6cb3dff4007de3c",
+            "lastWriteUtc": "2026-01-01T05:00:00.0000000Z"
+          },
+          {
+            "relativePath": "Mods\\KingmakerGunslinger\\assets\\soundbanks\\firearm-soundbank-manifest.json",
+            "bytes": 610,
+            "sha256": "bf57981ad5ec2cbf3149ecafc3ef737d87bc9035b14bccc7d254dca8f991c62e",
+            "lastWriteUtc": "2026-01-01T05:00:00.0000000Z"
+          },
+          {
+            "relativePath": "Mods\\KingmakerGunslinger\\blueprints\\blueprints.json",
+            "bytes": 866273,
+            "sha256": "aa5152aaa99f73f7cc01b88edb74b14a5dc5f0daf01f95cb4fb2cd7a85f326c3",
+            "lastWriteUtc": "2026-01-01T05:00:00.0000000Z"
+          },
+          {
+            "relativePath": "Mods\\KingmakerGunslinger\\blueprints\\blueprints.schema.json",
+            "bytes": 1930,
+            "sha256": "60433421fc40be98373401ebd1103dff366fcc62609dc300bd0a79d033852374",
+            "lastWriteUtc": "2026-01-01T05:00:00.0000000Z"
+          },
+          {
+            "relativePath": "Mods\\KingmakerGunslinger\\FeatureModules.json",
+            "bytes": 435,
+            "sha256": "6e24b2788a0c8f063d6e561a27c93f9c5349f2fc21b5217689da8aefdbb385d0",
+            "lastWriteUtc": "2026-10-03T15:57:42.3658798Z"
+          }
+        ]
+      },
+      {
+        "folder": "KingmakerLastAzlantiPreserver",
+        "Id": "KingmakerLastAzlantiPreserver",
+        "DisplayName": "Last Azlanti Preserver",
+        "Version": "0.1.1",
+        "AssemblyName": "KingmakerLastAzlantiPreserver.dll",
+        "EntryMethod": "KingmakerLastAzlantiPreserver.Main.Load",
+        "ManagerVersion": "0.33.0",
+        "GameVersion": "2.1.7",
+        "Requirements": [],
+        "fileCount": 8,
+        "totalBytes": 242560.0,
+        "assembly": {
+          "relativePath": "Mods\\KingmakerLastAzlantiPreserver\\KingmakerLastAzlantiPreserver.dll",
+          "bytes": 116736,
+          "lastWriteUtc": "2000-01-01T05:00:00.0000000Z",
+          "sha256": "5be7a3691fbdde8ea4d351d8a7aee6adb78a5b401c9ac896435748ba99c0e85b",
+          "fileVersion": "0.1.1.0",
+          "productVersion": "0.1.1.0",
+          "assembly": {
+            "name": "KingmakerLastAzlantiPreserver",
+            "assemblyVersion": "0.1.1.0",
+            "mvid": "65898171-203c-44e2-9745-a164e9643911",
+            "metadataVersion": "v4.0.30319"
+          },
+          "peMachine": "I386"
+        },
+        "configFiles": [
+          {
+            "relativePath": "Mods\\KingmakerLastAzlantiPreserver\\licenses\\FIRST-AZLANTI-MIT.txt",
+            "bytes": 1085,
+            "sha256": "6903cf1f511d309ea5d981c55a2116351813940b5fcf6025d4a1a67c2242b58a",
+            "lastWriteUtc": "2000-01-01T05:00:00.0000000Z"
+          },
+          {
+            "relativePath": "Mods\\KingmakerLastAzlantiPreserver\\Settings.xml",
+            "bytes": 429,
+            "sha256": "263da5cc1791e410bac5f8a0a82737e4d4960c67e4a137160d6bfd70e637ff2a",
+            "lastWriteUtc": "2026-10-08T23:24:19.2913928Z"
+          }
+        ]
+      },
+      {
+        "folder": "ProperFlanking2",
+        "Id": "ProperFlanking2",
+        "DisplayName": "Proper Flanking 2",
+        "Version": "1.2.3-2.1",
+        "AssemblyName": "ProperFlanking20.dll",
+        "EntryMethod": "ProperFlanking20.Main.Load",
+        "ManagerVersion": "0.13.0",
+        "Requirements": [
+          "CallOfTheWild"
+        ],
+        "HomePage": "https://www.nexusmods.com/pathfinderkingmaker/mods/146",
+        "fileCount": 20,
+        "totalBytes": 745784.0,
+        "assembly": {
+          "relativePath": "Mods\\ProperFlanking2\\ProperFlanking20.dll",
+          "bytes": 110080,
+          "lastWriteUtc": "2026-09-06T17:20:01.1942638Z",
+          "sha256": "b12baf538f0568b51c3b0e26d8d061d0cc3ad61a18b3e63c8b008c439b8a2666",
+          "fileVersion": "1.0.0.0",
+          "productVersion": "1.0.0.0",
+          "assembly": {
+            "name": "ProperFlanking20",
+            "assemblyVersion": "1.0.0.0",
+            "mvid": "980f03cb-a29f-4ed1-9903-086f5ab23328",
+            "metadataVersion": "v4.0.30319"
+          },
+          "peMachine": "I386"
+        },
+        "configFiles": [
+          {
+            "relativePath": "Mods\\ProperFlanking2\\blueprints.txt",
+            "bytes": 14446,
+            "sha256": "4d1b82e56dffbf00a0e60a26a43af897a1acaf33c6e0963f881d53b882950b07",
+            "lastWriteUtc": "2026-09-06T17:20:01.1872455Z"
+          },
+          {
+            "relativePath": "Mods\\ProperFlanking2\\loaded_blueprints.txt",
+            "bytes": 14512,
+            "sha256": "14c1909871a4e5b21489c4086b22f079b9a4debac47d5a5afd9dba89ef33cb93",
+            "lastWriteUtc": "2026-10-08T23:24:00.3054231Z"
+          },
+          {
+            "relativePath": "Mods\\ProperFlanking2\\settings.json",
+            "bytes": 105,
+            "sha256": "6e473006dc913464cd7556baba6a2b08c4d8c1886a5b2b530100a737b8a595da",
+            "lastWriteUtc": "2026-09-06T17:20:01.1962695Z"
+          }
+        ]
+      },
+      {
+        "folder": "RacesUnleashed",
+        "Id": "RacesUnleashed",
+        "DisplayName": "Races Unleashed",
+        "Version": "1.0.11",
+        "AssemblyName": "RacesUnleashed.dll",
+        "EntryMethod": "RacesUnleashed.Main.Load",
+        "ManagerVersion": "0.13.0",
+        "Requirements": [],
+        "HomePage": "https://www.nexusmods.com/pathfinderkingmaker/mods/144",
+        "fileCount": 362,
+        "totalBytes": 22933741.0,
+        "assembly": {
+          "relativePath": "Mods\\RacesUnleashed\\RacesUnleashed.dll",
+          "bytes": 260608,
+          "lastWriteUtc": "2026-09-06T17:16:41.5007196Z",
+          "sha256": "6d18168cb90ffe60931addc8ee11e42b3ef647ef0e6d4b7ce8980d44659f4cb0",
+          "fileVersion": "1.0.0.0",
+          "productVersion": "1.0.0.0",
+          "assembly": {
+            "name": "RacesUnleashed",
+            "assemblyVersion": "1.0.0.0",
+            "mvid": "e9b9acb5-9b3f-41ad-bbd7-74494d5d7680",
+            "metadataVersion": "v4.0.30319"
+          },
+          "peMachine": "I386"
+        },
+        "configFiles": [
+          {
+            "relativePath": "Mods\\RacesUnleashed\\baseline_assets.txt",
+            "bytes": 47308,
+            "sha256": "d18a6c4b0933644fc63c5c5bd58e18e130065186320b604d587416beb2c6de92",
+            "lastWriteUtc": "2026-09-06T17:16:41.3122263Z"
+          },
+          {
+            "relativePath": "Mods\\RacesUnleashed\\Localization\\enGB.json",
+            "bytes": 48145,
+            "sha256": "9d2f438b5ec5de650fccc80b429f2f083944db145e65ffcc7b8db1da18613b69",
+            "lastWriteUtc": "2026-09-06T17:16:41.4987144Z"
+          },
+          {
+            "relativePath": "Mods\\RacesUnleashed\\Settings.json",
+            "bytes": 38,
+            "sha256": "270899c3f6c3d29bfe777fc2b55a0bb0404ae50786dbac8f1dccf77e8b9cabbf",
+            "lastWriteUtc": "2026-10-08T23:24:19.2933929Z"
+          }
+        ]
+      },
+      {
+        "folder": "SkipIntro",
+        "Id": "SkipIntro",
+        "DisplayName": "SkipIntro",
+        "Version": "1.3.1",
+        "EntryMethod": "SkipIntro.Main.Load",
+        "fileCount": 5,
+        "totalBytes": 42182.0,
+        "configFiles": [
+          {
+            "relativePath": "Mods\\SkipIntro\\controls.txt",
+            "bytes": 76,
+            "sha256": "272d2316ad7446bf6132b59fd331ba8171c0e0e27872fb65725baa715c764cc0",
+            "lastWriteUtc": "2026-09-10T18:09:51.3060117Z"
+          }
+        ]
+      },
+      {
+        "folder": "TweakOrTreat",
+        "Id": "TweakOrTreat",
+        "DisplayName": "Tweak or Treat",
+        "Version": "1.1.0",
+        "AssemblyName": "TweakOrTreat.dll",
+        "EntryMethod": "TweakOrTreat.Main.Load",
+        "ManagerVersion": "0.22.9",
+        "Requirements": [
+          "CallOfTheWild",
+          "RacesUnleashed"
+        ],
+        "LoadAfter": [
+          "CallOfTheWild",
+          "RacesUnleashed",
+          "DerringDo"
+        ],
+        "HomePage": "",
+        "fileCount": 22,
+        "totalBytes": 1917778.0,
+        "assembly": {
+          "relativePath": "Mods\\TweakOrTreat\\TweakOrTreat.dll",
+          "bytes": 364544,
+          "lastWriteUtc": "2026-09-06T17:20:04.6042931Z",
+          "sha256": "a518324e15632aba46d6c467b156a31e9afd282e9827dee3e79ad14673852b92",
+          "fileVersion": "1.0.0.0",
+          "productVersion": "1.0.0.0",
+          "assembly": {
+            "name": "TweakOrTreat",
+            "assemblyVersion": "1.0.0.0",
+            "mvid": "56f6c205-0ccb-47a7-b1d6-f000ff290b68",
+            "metadataVersion": "v4.0.30319"
+          },
+          "peMachine": "I386"
+        },
+        "configFiles": [
+          {
+            "relativePath": "Mods\\TweakOrTreat\\blueprints.txt",
+            "bytes": 84961,
+            "sha256": "e3a5538197401703fa6115c6ab2f059f8289416f238744c6d7f2a9fc97f195e3",
+            "lastWriteUtc": "2026-09-06T17:20:04.5952652Z"
+          },
+          {
+            "relativePath": "Mods\\TweakOrTreat\\loaded_blueprints.txt",
+            "bytes": 83634,
+            "sha256": "96e1378211307caa84afcc5ece61823818695a2a998f66ed2a58944160f123a0",
+            "lastWriteUtc": "2026-10-08T23:24:01.1949587Z"
+          },
+          {
+            "relativePath": "Mods\\TweakOrTreat\\PrestigiousSpellcaster\\master_chymist.json",
+            "bytes": 82,
+            "sha256": "220f31c21253e4afba9425c2daf5c757883c51a157b6c4c5ca1cbf20cf20504b",
+            "lastWriteUtc": "2026-09-06T17:20:04.6012810Z"
+          },
+          {
+            "relativePath": "Mods\\TweakOrTreat\\settings.json",
+            "bytes": 289,
+            "sha256": "dd0cdb89922ec129100bd840bc06c6409e6411c1929b34ddd4cf8d6136b8b10d",
+            "lastWriteUtc": "2026-09-06T17:20:04.6012810Z"
+          }
+        ]
+      },
+      {
+        "folder": "ZFavoredClass",
+        "Id": "ZFavoredClass",
+        "DisplayName": "Favored Class",
+        "Version": "1.3.1",
+        "AssemblyName": "ZFavoredClass.dll",
+        "EntryMethod": "ZFavoredClass.Main.Load",
+        "ManagerVersion": "0.13.0",
+        "Requirements": [
+          "CallOfTheWild"
+        ],
+        "HomePage": "https://www.nexusmods.com/pathfinderkingmaker/mods/151",
+        "fileCount": 24,
+        "totalBytes": 1419177.0,
+        "assembly": {
+          "relativePath": "Mods\\ZFavoredClass\\ZFavoredClass.dll",
+          "bytes": 358400,
+          "lastWriteUtc": "2026-09-06T17:19:59.5684042Z",
+          "sha256": "dcd3adf98d1a04c30d772381e7c56ce4beff35a98bcea165aff206a2f0aac26c",
+          "fileVersion": "1.0.0.0",
+          "productVersion": "1.0.0.0",
+          "assembly": {
+            "name": "ZFavoredClass",
+            "assemblyVersion": "1.0.0.0",
+            "mvid": "3efd38e7-8682-4b4d-8d53-e368a3664919",
+            "metadataVersion": "v4.0.30319"
+          },
+          "peMachine": "I386"
+        },
+        "configFiles": [
+          {
+            "relativePath": "Mods\\ZFavoredClass\\blueprints.txt",
+            "bytes": 131183,
+            "sha256": "742bcdeb36c66133aa39bbedbd1c7a95aeccfd9c86e556eaf83148c0ade8f58d",
+            "lastWriteUtc": "2026-09-06T17:19:59.5573758Z"
+          },
+          {
+            "relativePath": "Mods\\ZFavoredClass\\Custom\\bonus_charmed_life.json",
+            "bytes": 264,
+            "sha256": "9f8f651f8986e821a0fabd2018970415854c22b57a626a3e4f155fd65fbb29f7",
+            "lastWriteUtc": "2026-09-06T17:19:59.5583783Z"
+          },
+          {
+            "relativePath": "Mods\\ZFavoredClass\\Custom\\bonus_panache.json",
+            "bytes": 373,
+            "sha256": "6647a6f6f95128795ad86ae40b192fdad2e46133a9bad754dffc8569eb96db8a",
+            "lastWriteUtc": "2026-09-06T17:19:59.5583783Z"
+          },
+          {
+            "relativePath": "Mods\\ZFavoredClass\\Custom\\channel_energy_bonus.json",
+            "bytes": 226,
+            "sha256": "64eab6c6252dcfd64c7d4c48b5579b76c83c3a0fd9ae3942121813a6ca14b93c",
+            "lastWriteUtc": "2026-09-06T17:19:59.5593809Z"
+          },
+          {
+            "relativePath": "Mods\\ZFavoredClass\\Custom\\druid_wildshape_natural_ac_bonus.json",
+            "bytes": 262,
+            "sha256": "4a7121aa621a6f242baf7418cf1b227639c28579f922d85390f2913a2bcb987a",
+            "lastWriteUtc": "2026-09-06T17:19:59.5593809Z"
+          },
+          {
+            "relativePath": "Mods\\ZFavoredClass\\Custom\\fervor_bonus.json",
+            "bytes": 190,
+            "sha256": "466fa107529a7a5a40ab1a7ad7e27aab859e51f5f5b814b0a8f2d0a6b5198c77",
+            "lastWriteUtc": "2026-09-06T17:19:59.5603834Z"
+          },
+          {
+            "relativePath": "Mods\\ZFavoredClass\\Custom\\harm_undead_bonus.json",
+            "bytes": 190,
+            "sha256": "89404ac1e69b8747d0423cc57b53c40bbc2cfc1d72cf34d7945f8c52fe5d2813",
+            "lastWriteUtc": "2026-09-06T17:19:59.5603834Z"
+          },
+          {
+            "relativePath": "Mods\\ZFavoredClass\\Custom\\patron_spells_bonus.json",
+            "bytes": 190,
+            "sha256": "0d9c87219a547f71ee7ebbb975c96d499d244b76f24bf0db418e40e569bb5e7d",
+            "lastWriteUtc": "2026-09-06T17:19:59.5613862Z"
+          },
+          {
+            "relativePath": "Mods\\ZFavoredClass\\Custom\\spiritualist_bonded_manifestation.json",
+            "bytes": 262,
+            "sha256": "6331ce0dbb270b31a5ab80fc885a914b35d4c728e8363b5c2197c8d515993add",
+            "lastWriteUtc": "2026-09-06T17:19:59.5613862Z"
+          },
+          {
+            "relativePath": "Mods\\ZFavoredClass\\Custom\\spiritualist_inference_bonus.json",
+            "bytes": 190,
+            "sha256": "22325bd342896244376b66591de3ef0a666149e0782104e8e50e7d4b5b516a69",
+            "lastWriteUtc": "2026-09-06T17:19:59.5613862Z"
+          },
+          {
+            "relativePath": "Mods\\ZFavoredClass\\loaded_blueprints.txt",
+            "bytes": 134936,
+            "sha256": "8d4e3fbd00315631ef63ad559c855e6a33521bab13946f4dd9f05d9db9e1cadd",
+            "lastWriteUtc": "2026-10-08T23:24:01.1809582Z"
+          },
+          {
+            "relativePath": "Mods\\ZFavoredClass\\PrestigiousSpellcaster\\arcane_archer.json",
+            "bytes": 82,
+            "sha256": "6f03ad0ba81f3a30cc289786823369fe78743f7f22f525042df03fa311d3fec4",
+            "lastWriteUtc": "2026-09-06T17:19:59.5633920Z"
+          },
+          {
+            "relativePath": "Mods\\ZFavoredClass\\PrestigiousSpellcaster\\dawnflower_anchorite.json",
+            "bytes": 76,
+            "sha256": "0a63eab5bf2d65eeab0a7b131b02f30ea8712a794f0ca7ac335100eb6ad6519a",
+            "lastWriteUtc": "2026-09-06T17:19:59.5633920Z"
+          },
+          {
+            "relativePath": "Mods\\ZFavoredClass\\PrestigiousSpellcaster\\deadeye_devotee.json",
+            "bytes": 82,
+            "sha256": "a2cdb493f0e231dae314d8f0b83856545c584e336f81ca1e88c008057bcdad20",
+            "lastWriteUtc": "2026-09-06T17:19:59.5643942Z"
+          },
+          {
+            "relativePath": "Mods\\ZFavoredClass\\PrestigiousSpellcaster\\dragon_disciple.json",
+            "bytes": 82,
+            "sha256": "c315d3658e8a8a22980aa1e2ab5e225e71b0d80e4426967416775f34b013a4b6",
+            "lastWriteUtc": "2026-09-06T17:19:59.5643942Z"
+          },
+          {
+            "relativePath": "Mods\\ZFavoredClass\\PrestigiousSpellcaster\\eldritch_knight.json",
+            "bytes": 76,
+            "sha256": "6892db975b1436260598e7541adef6e81d57f2a66fb41722aba1f34459b82ba8",
+            "lastWriteUtc": "2026-09-06T17:19:59.5653966Z"
+          },
+          {
+            "relativePath": "Mods\\ZFavoredClass\\PrestigiousSpellcaster\\hinterlander.json",
+            "bytes": 76,
+            "sha256": "f67b2129d03f1528cbdb27fefa992fd2689e12981133a24c2aa88f7d982cd3a8",
+            "lastWriteUtc": "2026-09-06T17:19:59.5653966Z"
+          },
+          {
+            "relativePath": "Mods\\ZFavoredClass\\PrestigiousSpellcaster\\holy_vindicator.json",
+            "bytes": 82,
+            "sha256": "5004be1107ba4e8eed6f01a7f5c7f885727fb48bd0f05a5b4fef67f83c1b4b4f",
+            "lastWriteUtc": "2026-09-06T17:19:59.5653966Z"
+          },
+          {
+            "relativePath": "Mods\\ZFavoredClass\\settings.json",
+            "bytes": 61,
+            "sha256": "bdceed77d2bf4a31dd9e4eeb64ef9d55a42ef59d23f46abcb1ddbcc6ef66754b",
+            "lastWriteUtc": "2026-09-06T17:19:59.5663994Z"
+          }
+        ]
+      }
+    ],
+    "modBackupsDirPresent": true
+  },
+  "destinations": {
+    "localLowRoot": "%USERPROFILE%\\AppData\\LocalLow\\Owlcat Games\\Pathfinder Kingmaker",
+    "saveDirectory": "%USERPROFILE%\\AppData\\LocalLow\\Owlcat Games\\Pathfinder Kingmaker\\Saved Games",
+    "saveFileCount": 95,
+    "saveFilePrefixes": [
+      {
+        "prefix": "Auto",
+        "count": 55
+      },
+      {
+        "prefix": "ForImport",
+        "count": 5
+      },
+      {
+        "prefix": "IronMan",
+        "count": 2
+      },
+      {
+        "prefix": "Manual",
+        "count": 19
+      },
+      {
+        "prefix": "Quick",
+        "count": 14
+      }
+    ],
+    "automationSaveNames": [
+      "Manual_298_KMG_AUTOMATION_BASELINE.zks",
+      "Manual_299_KMG_AUTOMATION_WORKING.zks",
+      "Manual_303_KBP_AUTOMATION_SEED.zks",
+      "Manual_304_KBP_AUTOMATION_BASELINE.zks",
+      "Manual_305_KBP_AUTOMATION_WORKING.zks"
+    ],
+    "log": "%USERPROFILE%\\AppData\\LocalLow\\Owlcat Games\\Pathfinder Kingmaker\\output_log.txt",
+    "areasCacheDirectory": "%USERPROFILE%\\AppData\\LocalLow\\Owlcat Games\\Pathfinder Kingmaker\\Areas",
+    "registrySettingsKey": "HKCU\\Software\\Owlcat Games\\Pathfinder Kingmaker (Unity PlayerPrefs; not read by this collector)",
+    "ummWrites": [
+      "Kingmaker_Data\\Managed\\UnityModManager\\Log.txt",
+      "Kingmaker_Data\\Managed\\UnityModManager\\Params.xml"
+    ]
+  },
+  "steamCloud": {
+    "app640820CloudLogLines": 7875,
+    "lastSyncDisabledOffline": true,
+    "lastRecordTimestamp": "2026-10-14 02:44:46",
+    "lastRecordIsOfflineFailure": true,
+    "steamProcessStartUtc": "2026-10-14T00:29:41.5087742Z"
+  },
+  "tools": {
+    "git": {
+      "path": "C:\\Program Files\\Git\\cmd\\git.exe"
+    },
+    "python": {
+      "path": "%USERPROFILE%\\AppData\\Local\\Microsoft\\WindowsApps\\python.exe"
+    },
+    "dotnet": {
+      "path": "C:\\Program Files\\dotnet\\dotnet.exe"
+    },
+    "node": {
+      "path": "C:\\Program Files\\nodejs\\node.exe"
+    },
+    "pwsh": {
+      "path": "%USERPROFILE%\\AppData\\Local\\Microsoft\\WindowsApps\\Microsoft.PowerShell_8wekyb3d8bbwe\\pwsh.exe"
+    },
+    "powershell": {
+      "path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+    },
+    "vmmap": "not found on PATH",
+    "vmmap64": "not found on PATH",
+    "procdump": "not found on PATH",
+    "windbg": "not found on PATH",
+    "cdb": "not found on PATH",
+    "ilspycmd": "not found on PATH",
+    "pythonVersion": "Python 3.14.7",
+    "gitVersion": "git version 2.55.0.windows.3",
+    "pwshVersion": "7.6.7",
+    "ilspycmdExisting": {
+      "path": "C:\\Dev\\KingmakerDevSetup\\tools\\ilspycmd\\ilspycmd.exe",
+      "sha256": "d4486d0338221a82d3742e43104d2ea6282526e12707e1ba30aa036bb8f8fde1",
+      "version": "ilspycmd: 9.1.0.7988; ICSharpCode.Decompiler: 9.1.0.7988"
+    },
+    "owlcatMonoProfiler": "not found (searched C:\\Dev and PATH)"
+  },
+  "competingWorkloadSnapshot": [
+    {
+      "name": "firefox",
+      "workingSetMiB": 1824.0
+    },
+    {
+      "name": "vmmem",
+      "workingSetMiB": 1708.0
+    },
+    {
+      "name": "firefox",
+      "workingSetMiB": 1193.0
+    },
+    {
+      "name": "Memory Compression",
+      "workingSetMiB": 969.0
+    },
+    {
+      "name": "firefox",
+      "workingSetMiB": 902.0
+    },
+    {
+      "name": "firefox",
+      "workingSetMiB": 662.0
+    },
+    {
+      "name": "MsMpEng",
+      "workingSetMiB": 624.0
+    },
+    {
+      "name": "claude",
+      "workingSetMiB": 579.0
+    },
+    {
+      "name": "node",
+      "workingSetMiB": 536.0
+    },
+    {
+      "name": "claude",
+      "workingSetMiB": 508.0
+    },
+    {
+      "name": "node",
+      "workingSetMiB": 490.0
+    },
+    {
+      "name": "firefox",
+      "workingSetMiB": 410.0
+    }
+  ],
+  "kingmakerRunning": false
+}
+
