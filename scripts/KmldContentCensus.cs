@@ -99,6 +99,94 @@ namespace Kmld
             finally { h.Dispose(); }
         }
 
+        public sealed class ReferrerResult
+        {
+            public int TargetsSampled; public long BytesScanned; public int Hits; public int Attributed;
+            public List<CandidateType> ReferrerTypes = new List<CandidateType>();
+            public Dictionary<string, int> FieldOffsets = new Dictionary<string, int>();
+        }
+
+        // One-hop referrer census (heuristic). Targets: up to maxTargets objects in targetRegions whose first qword == vtable.
+        // Scans scanRegions for qwords equal to a target address; attributes each hit to the nearest preceding 16-byte slot
+        // (within maxBackBytes) whose first qword resolves to a Mono class. Read-only.
+        public static ReferrerResult Referrers(int pid, long expectedCreation, ulong vtable, List<RegionSpan> targetRegions,
+            List<RegionSpan> scanRegions, List<RegionSpan> map, int maxTargets, long maxScanBytes, int maxBackBytes, int maxHits)
+        {
+            var h = OpenProcess(0x0400 | 0x0010 | 0x1000, false, (uint)pid);
+            if (h.IsInvalid) throw new Win32Exception(Marshal.GetLastWin32Error(), "OpenProcess");
+            try
+            {
+                long c, e, k, u;
+                if (!GetProcessTimes(h, out c, out e, out k, out u) || c != expectedCreation) throw new InvalidOperationException("identity mismatch");
+                map.Sort((a, b) => a.Base.CompareTo(b.Base));
+                var res = new ReferrerResult();
+                var targets = new HashSet<ulong>();
+                var buf = new byte[1 << 16];
+                foreach (var s in targetRegions)
+                {
+                    for (ulong off = 0; off < s.Size && targets.Count < maxTargets; off += (ulong)buf.Length)
+                    {
+                        int want = (int)Math.Min((ulong)buf.Length, s.Size - off); IntPtr got;
+                        if (!ReadProcessMemory(h, new IntPtr((long)(s.Base + off)), buf, new IntPtr(want), out got) || got.ToInt64() != want) continue;
+                        for (int i = 0; i + 8 <= want && targets.Count < maxTargets; i += 16)
+                            if (BitConverter.ToUInt64(buf, i) == vtable) targets.Add(s.Base + off + (ulong)i);
+                    }
+                    if (targets.Count >= maxTargets) break;
+                }
+                res.TargetsSampled = targets.Count;
+                var typeCache = new Dictionary<ulong, CandidateType>();
+                var refCounts = new Dictionary<string, CandidateType>();
+                foreach (var s in scanRegions)
+                {
+                    if (res.BytesScanned >= maxScanBytes || res.Hits >= maxHits) break;
+                    for (ulong off = 0; off < s.Size && res.BytesScanned < maxScanBytes && res.Hits < maxHits; off += (ulong)buf.Length)
+                    {
+                        int want = (int)Math.Min((ulong)buf.Length, s.Size - off); IntPtr got;
+                        if (!ReadProcessMemory(h, new IntPtr((long)(s.Base + off)), buf, new IntPtr(want), out got) || got.ToInt64() != want) continue;
+                        res.BytesScanned += want;
+                        for (int i = 0; i + 8 <= want; i += 8)
+                        {
+                            ulong q = BitConverter.ToUInt64(buf, i);
+                            if (!targets.Contains(q)) continue;
+                            ulong hit = s.Base + off + (ulong)i;
+                            if (targets.Contains(hit)) continue;          // the target's own header slot
+                            res.Hits++;
+                            ulong slot = hit & ~0xFUL;
+                            for (int back = 0; back <= maxBackBytes; back += 16)
+                            {
+                                ulong cand = slot - (ulong)back;
+                                if (cand < s.Base) break;
+                                var hb = Read(h, cand, 8); if (hb == null) break;
+                                ulong vt = BitConverter.ToUInt64(hb, 0);
+                                if (vt == 0 || Find(map, vt) == null) continue;
+                                CandidateType ct;
+                                if (!typeCache.TryGetValue(vt, out ct))
+                                {
+                                    ct = new CandidateType { Pointer = vt };
+                                    ResolveMono(h, vt, map, ct);
+                                    typeCache[vt] = ct;
+                                }
+                                if (ct.Name == null) continue;
+                                res.Attributed++;
+                                string key = (ct.Namespace ?? "") + "." + ct.Name;
+                                CandidateType agg;
+                                if (!refCounts.TryGetValue(key, out agg)) { agg = new CandidateType { Pointer = vt, Name = ct.Name, Namespace = ct.Namespace, Kind = "mono-object", Evidence = ct.Evidence }; refCounts[key] = agg; }
+                                agg.Count++;
+                                string fo = key + "+0x" + (hit - cand).ToString("X");
+                                int n; res.FieldOffsets.TryGetValue(fo, out n); res.FieldOffsets[fo] = n + 1;
+                                break;
+                            }
+                            if (res.Hits >= maxHits) break;
+                        }
+                    }
+                }
+                res.ReferrerTypes = new List<CandidateType>(refCounts.Values);
+                res.ReferrerTypes.Sort((a, b) => b.Count.CompareTo(a.Count));
+                return res;
+            }
+            finally { h.Dispose(); }
+        }
+
         static RegionSpan Find(List<RegionSpan> map, ulong p)
         {
             int lo = 0, hi = map.Count - 1;

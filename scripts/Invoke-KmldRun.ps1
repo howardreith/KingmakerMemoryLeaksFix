@@ -261,6 +261,10 @@ try {
                         $cc = & (Join-Path $PSScriptRoot 'Get-KmldContentCensus.ps1') -ProcessId $game.Pid -ExpectedCreationFileTimeUtc $creation -RunDir $runDir -BaselineMemmapCsv (Join-Path $runDir 'memmap-idle-start.csv') -Label 'idle-end'
                         Event 'content-census' "allocationsOfSize=$($cc.allocationsOfSize) new=$($cc.newSinceBaseline) ms=$($cc.elapsedMs)"
                     } catch { Event 'content-census-failed' $_.Exception.Message }
+                    try {
+                        $rf = & (Join-Path $PSScriptRoot 'Get-KmldReferrers.ps1') -ProcessId $game.Pid -ExpectedCreationFileTimeUtc $creation -RunDir $runDir -BaselineMemmapCsv (Join-Path $runDir 'memmap-idle-start.csv')
+                        Event 'referrers' "types=$(@($rf.types).Count) ms=$($rf.elapsedMs)"
+                    } catch { Event 'referrers-skipped' $_.Exception.Message }
                 }
             }
         }

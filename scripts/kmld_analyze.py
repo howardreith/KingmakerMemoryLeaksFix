@@ -357,6 +357,8 @@ def main(argv=None):
     ap.add_argument("--settle-tail-s", type=float, default=10.0)
     ap.add_argument("--warmup-cycles", type=int, default=2)
     a = ap.parse_args(argv)
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     r = analyze(a.run_dir, a.out, a.idle_phase, a.settle_phase, a.settle_tail_s, a.warmup_cycles)
     print(render_md(r))
     return 0 if "error" not in r else 2
