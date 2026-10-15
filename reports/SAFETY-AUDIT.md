@@ -2,7 +2,26 @@
 
 Final checks are re-run at the end of the mission; the "verified" column records the command that actually ran.
 
-<!-- FINAL-CHECKS -->
+## Final checks — 2026-10-15 17:07 UTC (`pwsh -File scripts/Test-KmldSafetyAudit.ps1`, output in private `manifests/safety-audit-*.json`)
+
+| Check | Result |
+|---|---|
+| Owned / any `Kingmaker.exe` processes | **none running** |
+| KMLD sampler / watchdog / controller processes | **none running** |
+| KMLD runtime lock | **absent** (every run released its lock; `-r2` via `Complete-KmldRun.ps1`) |
+| Protected-save violation records | **none** |
+| Foreign runtime leases (Buff Planner, Gunslinger) | none present; never created or removed by KMLD |
+| Original saves | **95/95 identical** (SHA-256, size, mtime) to the first pre-launch snapshot (2026-10-15 08:37 local); none added or removed. Read-only save copies were hash-verified at copy time |
+| Game, Unity, Mono, Doorstop, UMM and mod assemblies | **34/34 SHA-256 equal** to `environment.json` |
+| Mod configuration | identity hash `71580945…` equal to the first preflight; same 16 mod folders; same 16 mods enabled in UMM |
+| Repair mods | none installed or enabled by KMLD; KingmakerBugfixes 1.3.3 was already installed and enabled and is unchanged |
+| Display PlayerPrefs | equal to the first pre-launch snapshot (`Use Native` 1, `ScreenResolution` 8, 1920×1080, mode 1); intermediate changes during the session were written by the game and reverted by later launches (see exception 4) |
+| Steam | offline mode; every App 640820 exit record `Sync Disabled` / `offlineMode=true`; no cloud transfer |
+| Fixes implemented | **none**. No game/mod/UMM file, save, cache, serialization or setting was changed by KMLD code; nothing calls `GC.Collect` or `UnloadUnusedAssets` |
+| Temporary instrumentation | none injected into the game (all observation external: process queries, `VirtualQueryEx`, bounded `ReadProcessMemory`, one window minimize in `-r4`) |
+| Unrelated projects | not modified: other `C:\Dev` labs were only read (docs, lease paths, the pre-existing ilspycmd); writes were confined to `C:\Dev\KingmakerMemoryLeakResearchLab`, the Claude memory folder for this project, and Python test temp dirs (auto-removed) |
+| Public upload / push | **none**. Branch `codex/kingmaker-memory-diagnostics` has local commits only; `origin` untouched. Two read-only web fetches (Owlcat profiler README, pinned KingmakerBugfixes source) |
+| Background tasks | all finished (run chains, monitors, sub-agents) |
 
 ## Exceptions and incidents (reported plainly)
 

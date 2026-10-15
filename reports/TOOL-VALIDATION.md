@@ -9,7 +9,7 @@ prove observational neutrality, profiler completeness, or anything about a leak.
 
 | Suite | Command (from repo root) | Result |
 |---|---|---|
-| Sampler / watchdog / runtime helpers | `pwsh -NoProfile -File tests/Test-KmldTools.ps1` | **28/28 pass** (final run `tools-20261015T160508Z`; earlier runs: 21/21 twice before the regression tests were added; one first-run failure was a test-design error — the child allocated before sampling began — fixed by a quiet baseline) |
+| Sampler / watchdog / runtime helpers / census | `pwsh -NoProfile -File tests/Test-KmldTools.ps1` | **31/31 pass** on the final code (run `tools-20261015T170751Z`); 28/28 at `tools-20261015T160508Z` before the census/recovery tests were added; earlier runs: 21/21 twice before the regression tests were added; one first-run failure was a test-design error — the child allocated before sampling began — fixed by a quiet baseline) |
 | Analysis | `python -I -m unittest discover -s tests -p "test_*.py"` | **16/16 pass** (10 analysis + 6 save-analyzer tests) |
 | GPU counter reader | ad hoc cross-check of `Kmld.GpuCounters` against `Get-Counter '\GPU Process Memory(pid_N_*)\…'` on a GPU-using process | exact match (dedicated 513,085,440 B; shared 55,201,792 B) |
 | Controller preflight | `scripts/Invoke-KmldRun.ps1 -PreflightOnly` (`kmld-preflight-dryrun-02`, `-03`) | 0 problems; the first dry run (`-01`) exposed a StrictMode `.Count` defect, fixed before any launch |

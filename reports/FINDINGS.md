@@ -11,10 +11,18 @@ Windows 10 19045 on the owner's workstation. Not extrapolated to other versions,
 
 ## Executive diagnosis
 
-<!-- W01-EXEC-ROW -->
+**Strongest established answer.** In the only workload that could run (main-menu idle, M0), one fresh process grew by
+**+157 MiB/min of private bytes for the whole 10-minute window (+1.37 GiB, no plateau)**, while two later fresh processes, and a
+5-minute minimized-window condition, stayed **flat (±0.02 MiB/min)**. The growth was Unity-native-allocator-sized private memory
+(4 MiB + 4 KiB blocks), not GPU memory, handles or threads. The only recorded difference is the display state the game started in
+(`Screenmanager Resolution Use Native = 0`, left by the previous session; less GPU memory and less CPU), so the trigger is a
+**hypothesis**, not established. Statically, several retention paths are fully determined in installed code (stale `EventBus`
+subscribers per main-menu return) but unmeasured. Save size grows with the number of persisted areas by design.
 
 | ID | Finding | Behaviour class | Evidence status | Magnitude | Main limitation |
 |---|---|---|---|---|---|
+| F-W01b | One main-menu idle run grew linearly; its launch display state differed | Unclassified growth (native-allocator-sized private memory) | **Blocked or inconclusive** — 1 of 3 fresh runs; trigger not isolated | `-r2`: +157.2 MiB/min (early 156.1, late 158.5; per-minute 125–189), +1.37 GiB in 10 min, peak 4.46 GiB | n = 1; the new allocations were not content-censused; display-state link is correlational |
+| F-W01a | Main-menu idle is flat in display state `Use Native = 1`, rendered or minimized | Bounded/expected under tested conditions | **Not reproduced under tested conditions** (2 fresh runs + 1 minimized condition) | `-r3` 0.00, `-r4` −0.01 MiB/min (10 min each); minimized 0.03 MiB/min (5 min) | Main menu only; M0 only |
 | F-H04 | Save size grows with the number of persisted per-area states (and, in one campaign, an append-only text `history` log) | Persistent save-state growth | **Measured (descriptive, read-only copies)** | One campaign: 114.6 → 163.0 MiB uncompressed over 28.4 → 37.8 play-hours; r = 0.994 with persisted-area count (≈1.2 MiB per area); largest save 240.6 MiB incl. 26.8 MiB `history` (243,278 lines) | By design; runtime load cost not measured; campaigns confounded |
 | F-H02a | Every return to the main menu leaves the previous `AuraSupport` subscribed to the static `EventBus` | Managed retention (small, per main-menu return) | **Static candidate only** — ownership path fully determined from installed code | Not measured; expected one small object graph (+ an `AuraService`) per return | No runtime count |
 | F-H02b | Every return to the main menu leaves the previous `GameStatistic` subscribed (with its `GameHistoryLog` strings) | Managed retention (per main-menu return) | **Static candidate only** — ownership path fully determined from installed code | Not measured; bounded by history accumulated since the last save/load | No runtime count |
@@ -22,7 +30,8 @@ Windows 10 19045 on the owner's workstation. Not extrapolated to other versions,
 | F-H01 | `InitiativeTrackerUnitVM.UpdateBuffs` discards `BuffVM`s without disposing them (public lead S2) | Allocation churn; bounded staleness | **Static candidate only — retention not supported** | Not measured | No global root holds discarded `BuffVM`s; **already patched in M0 by KingmakerBugfixes 1.3.3** |
 | F-H03 | Asset/resource caches with weak eviction; main-menu return unloads assets *before* resetting game state | Bounded cache growth / lifecycle lag (candidate) | **Static candidate only** | Not measured | Most caches are content-keyed (warm-up), native sizes unknown |
 
-Unexplained share of observed growth: **not estimable** — no gameplay growth was observed because no gameplay workload could run.
+Unexplained share of observed growth: the only runtime growth observed (F-W01b, +1.37 GiB in 10 minutes) is **entirely
+unexplained** — no object type or owner was captured for it. No gameplay workload could run, so the gameplay share is unknown.
 
 ---
 
@@ -133,4 +142,56 @@ Unexplained share of observed growth: **not estimable** — no gameplay growth w
 * **Counterpoint:** many of these are keyed by content (bounded warm-up, not leaks).
 * **Smallest experiments:** N4/N5 (with Unity's own `Loaded Objects now: X` lines per load).
 
-<!-- W01-RECORD -->
+### F-W01 — Main-menu idle (W01a), configuration M0
+
+Runs: `kmld-w01menu-m0-r2` (pilot), `-r3`, `-r4` — three fresh processes launched through Steam (offline, Sync Disabled), no input,
+600 s idle after a 60 s settle at the UMM `[Manager] Spawning.` marker, 1 s Tier A sampling, region censuses at idle start/mid/end;
+`-r3`/`-r4` add a post-idle content census, `-r4` adds a post-idle 300 s minimized-window condition. Owner-authorized ("Run now,
+3 runs"). Cross-run table: `reports/data/w01-run-comparison.csv`.
+
+| | `-r2` (pilot) | `-r3` | `-r4` |
+|---|---|---|---|
+| Display PlayerPrefs at start (`Use Native` / `ScreenResolution` index; 1920×1080, mode 1 in all) | **0** / 8 | 1 / 7 | 1 / 8 |
+| Main-menu ready after launch | ≈35 s expected; marker mis-detected at 1.7 s (idle began at 63 s, after readiness) | 35.4 s | 35.2 s |
+| Idle private slope (MiB/min), early / late half | **157.18** (156.10 / 158.47) | 0.00 (0.01 / 0.01) | −0.01 (−0.01 / 0.01) |
+| Idle tail − head (60 s medians) | **+1,368.5 MiB** | +0.10 MiB | −0.03 MiB |
+| Idle working-set slope (MiB/min) | 142.95 | 0.03 | 0.02 |
+| Handles / threads during idle | flat (−1.1 / −0.2 per min) | flat | flat |
+| GPU dedicated / shared (WDDM, MiB) | **787.5** / 71.9 (flat) | 1,036.6 / 71.7 (flat) | 1,036.6 / 73.2 (flat) |
+| Game CPU during idle (% of one core) | **11.8** | 27.1 | 27.8 |
+| Peak private | 4,462.5 MiB | 3,169.0 MiB | 3,175.8 MiB |
+| Window | not recorded | not recorded | foreground 100 %, not minimized |
+| Minimized condition (300 s) | — | — | private +0.03 MiB/min, CPU 15.8 % |
+| New 4,198,400-byte private allocations during idle | 159 in the first 5 min (764.7 MiB), +1 × 128 MiB block later | 0 | 0 |
+
+* **Behaviour classification:** F-W01a — bounded/expected under tested conditions. F-W01b — unclassified growth; the memory class is
+  committed private memory in 4 MiB + 4 KiB `PAGE_READWRITE` allocations (plus one 128 MiB block). A content census of the
+  allocations of that size that existed in `-r3` shows Unity native content (frequent qwords pointing into `UnityPlayer.dll`;
+  shader/constant-buffer names), so these blocks belong to Unity's native allocator — **but the new blocks of `-r2` were never
+  content-censused**, so what they held is not known. Not GPU (flat), not handles/threads (flat), not log output (game log silent).
+* **Evidence status / rationale:** pre-declared criterion (`protocols/W01-menu-idle.md`: slope > 0.5 MiB/min and tail−head > 5 MiB in
+  all valid runs) **not met**: 1 of 3. F-W01b cannot be called reproducible; it is also far outside the noise of the other runs
+  (RMSE ≈ 0.05 MiB), so it is not a measurement artefact of the sampler (same tool, same host).
+* **Player-visible symptom (potential):** a game left at the main menu could grow by ≈9 GiB/hour in the `-r2` state — an
+  extrapolation **not** tested beyond 10 minutes.
+* **Minimal reproducer:** `pwsh -File scripts/Invoke-KmldRun.ps1 -Workload W01-menu-idle` (protocol `protocols/W01-menu-idle.md`).
+  Reset = fresh process. The `-r2` condition additionally requires starting with `Use Native = 0` (see next experiment).
+* **Exposure denominator:** seconds at the main menu (no cycles).
+* **Warm-up / plateau:** `-r2` linear for the full window, no plateau; `-r3`/`-r4` flat from the start of idle. No natural collection
+  is observable externally at the main menu.
+* **Objects implicated / allocation site / retaining owner:** not captured.
+* **Expected vs observed lifetime boundary:** none applicable (no lifecycle boundary crossed during idle).
+* **Alternative explanations considered:** owner input — excluded (console idle since 12:17:45, before `-r2` launched); per-frame
+  logging — excluded (log silent); GC suppression by game/mods — no GC-disabling API found in game, UMM, UniRx, KingmakerBugfixes or
+  mod binaries; minimized/non-rendering window — **not supported** (`-r4` minimized condition flat in the `Use Native = 1` state);
+  sampler artefact — excluded (flat runs with identical tooling). Remaining candidates: the non-native display state (1080p in
+  fullscreen-window on a 4K desktop: lower GPU memory and CPU), and any unrecorded state of the `-r2` session (e.g. window
+  focus/z-order, which was not sampled then).
+* **Contribution to total growth:** F-W01b accounts for all runtime growth observed in this mission; its share of real gameplay
+  growth is unknown.
+* **Evidence artifacts:** private `run-data/kmld-w01menu-m0-r{2,3,4}/` (`samples.csv`, `memmap-*.csv/json`, `analysis*.{json,md}`,
+  `content-census-*.json`, `write-audit.json`, `manifest.json` with SHA-256 of each artifact).
+* **Smallest additional experiment:** one matched fresh-process W01 run starting in `Use Native = 0` (the `-r2` state) with the
+  content census of the **new** allocations and window sampling — then, if it grows, repeat ×3 and compare with `Use Native = 1`.
+  Requires owner authorization because it means setting (and afterwards restoring) the owner's display PlayerPrefs or passing
+  Unity screen arguments through Steam.

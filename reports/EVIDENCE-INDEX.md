@@ -13,8 +13,8 @@ are the integrity reference. Nothing here is published.
 | `kmld-preflight-dryrun-03` | preflight only (owner override) | 0 problems | — | `preflight.json` |
 | `kmld-w01menu-m0-r1` | W01 attempt | **aborted** — guard defect; game ran ~185 s unobserved, closed by the owner | incident record only; **no samples** | `incident.json`, `snapshot-before.json`, `output_log.full-session-recovered.txt` |
 | `kmld-w01menu-m0-r2` | W01 pilot | completed-recovered (controller post-processing failed; verification completed by `Complete-KmldRun.ps1`) | idle window valid (starts launch + 63 s, after main-menu readiness); settle window overlapped startup because readiness was mis-detected from the previous log | `samples.csv`, `memmap-idle-{start,mid,end}.{csv,json}`, `analysis.{json,md}`, `write-audit.json`, `snapshot-*.json`, `output_log.this-run.txt` |
-| `kmld-w01menu-m0-r3` | W01 confirmation 1 + post-idle content census | see FINDINGS F-W01 | | same + `content-census-idle-end.json` |
-| `kmld-w01menu-m0-r4` | W01 confirmation 2 + post-idle content census | see FINDINGS F-W01 | | same |
+| `kmld-w01menu-m0-r3` | W01 confirmation 1 + post-idle content census | completed | idle flat; census of pre-existing 4 MiB + 4 KiB blocks (Unity native content) | same as `-r2` + `content-census-idle-end.json` |
+| `kmld-w01menu-m0-r4` | W01 confirmation 2 + post-idle census + 300 s minimized condition | completed | idle flat; minimized flat; window state sampled | same + `content-census-minimized-end.json`, `memmap-minimized-{start,end}`, `analysis-minimized/` |
 
 Runtime state: `C:\Dev\KingmakerMemoryLeakResearchLab\runtime-state\` (lock, lock state, `protected-save-violations\` — empty).
 

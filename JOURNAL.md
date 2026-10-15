@@ -78,3 +78,10 @@ Times are local (EDT, UTC−4) on 2026-10-15 unless stated. Only actions that ac
   (frequent qwords pointing into `UnityPlayer.dll`; shader/constant-buffer names; `Assembly-CSharp.dll` ×5,168), not Mono objects.
   The earlier "Boehm heap section" reading of this allocation size is withdrawn; these are Unity native-allocator blocks. The
   Mono class-name heuristic produced only a spurious match ("ure") and is treated as unvalidated.
+* `-r4` (12:48–13:05): starts `Use Native = 1`, `ScreenResolution = 8`; window foreground and not minimized throughout idle; idle
+  flat (−0.015 MiB/min); no new 4,198,400-byte allocations (referrer scan correctly skipped); post-idle **minimized** 300 s
+  (`ShowWindow` minimize confirmed iconic): flat (+0.033 MiB/min), CPU 27.8 % → 15.8 %. Graceful close, `completed`, lock released.
+* Pre-declared W01 criterion not met (1 of 3 runs). Findings F-W01a/b written; N0 (matched `Use Native = 0` run) proposed.
+* Safety audit (`scripts/Test-KmldSafetyAudit.ps1`, 17:07 UTC): no processes, no lock, no violations, no leases; 95/95 saves
+  identical to the 08:37 pre-launch snapshot; 34/34 binaries equal; mod identity hash equal; display prefs back to their
+  pre-mission values; Steam offline. Final tests: PowerShell 31/31, Python 16/16.
