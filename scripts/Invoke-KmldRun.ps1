@@ -32,6 +32,8 @@ param(
     [switch]$NoMemoryMaps,
     # Read-only content census of allocations that grew during idle, taken after the measured window.
     [switch]$ContentCensusAtEnd,
+    # Post-idle minimized-window condition in seconds; -1 = 300 when -ContentCensusAtEnd is given, else 0.
+    [int]$MinimizedIdleSeconds = -1,
     # A launch opens a full-screen window on the console session. Refuse while someone is using it.
     [int]$MinConsoleIdleMinutes = 15,
     [switch]$AllowActiveConsole,
@@ -265,6 +267,27 @@ try {
                         $rf = & (Join-Path $PSScriptRoot 'Get-KmldReferrers.ps1') -ProcessId $game.Pid -ExpectedCreationFileTimeUtc $creation -RunDir $runDir -BaselineMemmapCsv (Join-Path $runDir 'memmap-idle-start.csv')
                         Event 'referrers' "types=$(@($rf.types).Count) ms=$($rf.elapsedMs)"
                     } catch { Event 'referrers-skipped' $_.Exception.Message }
+                }
+                # Post-idle condition (after the measured window): minimized window, same main menu, no input.
+                # -1 = automatic: 300 s when -ContentCensusAtEnd is given (pilot -r2 grew while -r3 rendered and stayed flat).
+                $minSeconds = if ($MinimizedIdleSeconds -lt 0) { if ($ContentCensusAtEnd) { 300 } else { 0 } } else { $MinimizedIdleSeconds }
+                if ($minSeconds -gt 0 -and -not $abort -and -not $NoMemoryMaps) {
+                    $mm = Write-KmldMemoryMap $bound $runDir 'minimized-start'; Event 'memmap' "minimized-start regions=$($mm.regionCount)"
+                    $ws = & (Get-Process -Id $PID).Path -NoProfile -File (Join-Path $PSScriptRoot 'Set-KmldWindowState.ps1') -ProcessId $game.Pid -ExpectedCreationFileTimeUtc $creation -State Minimize 2>&1
+                    Event 'window-minimize' ([string]($ws -join ' '))
+                    Set-Phase '2' 'minimized-idle'
+                    $tm = Get-Date
+                    while (((Get-Date) - $tm).TotalSeconds -lt $minSeconds -and -not $abort) { $abort = & $check; Start-Sleep -Milliseconds 1000 }
+                    if (-not $abort) {
+                        $mm = Write-KmldMemoryMap $bound $runDir 'minimized-end'; Event 'memmap' "minimized-end regions=$($mm.regionCount)"
+                        if ($ContentCensusAtEnd) {
+                            Set-Phase '2' 'post-minimized-census'
+                            try {
+                                $cc2 = & (Join-Path $PSScriptRoot 'Get-KmldContentCensus.ps1') -ProcessId $game.Pid -ExpectedCreationFileTimeUtc $creation -RunDir $runDir -BaselineMemmapCsv (Join-Path $runDir 'memmap-minimized-start.csv') -Label 'minimized-end'
+                                Event 'content-census' "minimized: allocationsOfSize=$($cc2.allocationsOfSize) new=$($cc2.newSinceBaseline) ms=$($cc2.elapsedMs)"
+                            } catch { Event 'content-census-failed' $_.Exception.Message }
+                        }
+                    }
                 }
             }
         }
