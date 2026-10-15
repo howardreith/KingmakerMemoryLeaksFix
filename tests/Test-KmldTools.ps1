@@ -136,6 +136,24 @@ Check 'launched-list-empty-after-close' (@(Get-KmldLaunchedGames $launch 'notepa
 $idle = [Kmld.SystemInfo]::MillisecondsSinceLastInput()
 Check 'console-idle-readable' ($idle -ge 0) "idleMs=$idle"
 
+# 11. Content census: string extraction on a known buffer (both alignments) and identity refusal.
+if (-not ('Kmld.ContentCensus' -as [type])) { Add-Type -Path (Join-Path $scripts 'KmldContentCensus.cs') }
+$ms = [IO.MemoryStream]::new()
+foreach ($i in 1..500) { $u = [Text.Encoding]::Unicode.GetBytes('KMLD_UTF16_MARKER'); $ms.Write($u, 0, $u.Length); $ms.Write([byte[]]::new(8), 0, 8); $a = [Text.Encoding]::ASCII.GetBytes('KMLD_ASCII_MARKER_LONG'); $ms.Write($a, 0, $a.Length); $ms.WriteByte(0) }
+$buf = $ms.ToArray(); $u16 = [Collections.Generic.Dictionary[string, int]]::new(); $asc = [Collections.Generic.Dictionary[string, int]]::new()
+[Kmld.ContentCensus]::ExtractStrings($buf, $buf.Length, $u16, $asc)
+$u16hits = ($u16.GetEnumerator() | Where-Object { $_.Key -like '*KMLD_UTF16_MARKER*' } | Measure-Object Value -Sum).Sum
+Check 'census-strings-both-alignments' ($u16hits -eq 500 -and $asc['KMLD_ASCII_MARKER_LONG'] -eq 500) "utf16=$u16hits ascii=$($asc['KMLD_ASCII_MARKER_LONG'])"
+$c11 = New-Child 'Start-Sleep 10'
+Start-Sleep -Milliseconds 500
+$cr11 = [Kmld.BoundProcess]::GetCreationTime($c11.Id)
+$refusedCensus = $false
+try { [void][Kmld.ContentCensus]::Run($c11.Id, $cr11 + 1, [Collections.Generic.List[Kmld.RegionSpan]]::new(), [Collections.Generic.List[Kmld.RegionSpan]]::new(), 1MB, 5) } catch { $refusedCensus = $_.Exception.Message -match 'identity mismatch' }
+Check 'census-identity-mismatch-refused' $refusedCensus ''
+Stop-Process -Id $c11.Id -ErrorAction SilentlyContinue
+$e0 = Compare-KmldManifest $null @()
+Check 'manifest-diff-empty-and-null' ($e0.unchanged) 'regression: run -r2 (empty Areas folder)'
+
 $results | Export-Csv (Join-Path $root 'results.csv') -NoTypeInformation
 $fail = @($results | Where-Object { -not $_.pass }).Count
 "TOTAL: $($results.Count) tests, $fail failed. Output: $root"

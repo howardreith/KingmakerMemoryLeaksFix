@@ -146,9 +146,11 @@ function Get-KmldTreeManifest([string]$Root, [switch]$Recurse, [long]$MaxHashByt
             sha256 = if ($NoHash -or $_.Length -gt $MaxHashBytes) { $null } else { Get-KmldSha256 $_.FullName } } })
 }
 
+# Compares by path, size, mtime and SHA-256. Empty/$null manifests are valid (regression: run -r2, empty Areas folder).
+# Manifests read back from JSON must be parsed with -DateKind String so lastWriteUtc stays a string.
 function Compare-KmldManifest($Before, $After) {
-    $b = @{}; foreach ($x in @($Before)) { $b[$x.path] = $x }
-    $a = @{}; foreach ($x in @($After)) { $a[$x.path] = $x }
+    $b = @{}; foreach ($x in @($Before | Where-Object { $null -ne $_ })) { $b[[string]$x.path] = $x }
+    $a = @{}; foreach ($x in @($After | Where-Object { $null -ne $_ })) { $a[[string]$x.path] = $x }
     $added = @($a.Keys | Where-Object { -not $b.ContainsKey($_) } | Sort-Object)
     $removed = @($b.Keys | Where-Object { -not $a.ContainsKey($_) } | Sort-Object)
     $changed = @($a.Keys | Where-Object { $b.ContainsKey($_) } | Where-Object {

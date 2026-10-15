@@ -30,6 +30,8 @@ param(
     [long]$GameHeadroomBytes = 6GB,
     [switch]$PreflightOnly,
     [switch]$NoMemoryMaps,
+    # Read-only content census of allocations that grew during idle, taken after the measured window.
+    [switch]$ContentCensusAtEnd,
     # A launch opens a full-screen window on the console session. Refuse while someone is using it.
     [int]$MinConsoleIdleMinutes = 15,
     [switch]$AllowActiveConsole,
@@ -252,6 +254,14 @@ try {
             if (-not $abort) {
                 if (-not $NoMemoryMaps) { $mm = Write-KmldMemoryMap $bound $runDir 'idle-end'; Event 'memmap' "idle-end regions=$($mm.regionCount) ms=$($mm.queryMs)" }
                 $manifest.completed_cycles = 1
+                # After the measured window: bounded read-only content census of allocations that grew during idle.
+                if ($ContentCensusAtEnd -and -not $NoMemoryMaps) {
+                    Set-Phase '1' 'post-idle-census'
+                    try {
+                        $cc = & (Join-Path $PSScriptRoot 'Get-KmldContentCensus.ps1') -ProcessId $game.Pid -ExpectedCreationFileTimeUtc $creation -RunDir $runDir -BaselineMemmapCsv (Join-Path $runDir 'memmap-idle-start.csv') -Label 'idle-end'
+                        Event 'content-census' "allocationsOfSize=$($cc.allocationsOfSize) new=$($cc.newSinceBaseline) ms=$($cc.elapsedMs)"
+                    } catch { Event 'content-census-failed' $_.Exception.Message }
+                }
             }
         }
     }
@@ -316,28 +326,39 @@ finally {
         streamingAssetsTop = Get-KmldTreeManifest (Join-Path $script:KmldGameRoot 'Kingmaker_Data\StreamingAssets') -NoHash
         playerPrefs = Get-KmldPlayerPrefs }
     Write-KmldJson (Join-Path $runDir 'snapshot-after.json') $after
-    $diff = [ordered]@{}
-    if (Get-Variable before -ErrorAction SilentlyContinue) {
-        foreach ($k in 'saves', 'localLowTop', 'areas', 'mods', 'umm', 'gameRoot', 'streamingAssetsTop') { $diff[$k] = Compare-KmldManifest $before[$k] $after[$k] }
-        $prefChanges = @($after.playerPrefs.Keys | Where-Object { $before.playerPrefs[$_] -ne $after.playerPrefs[$_] }) + @($before.playerPrefs.Keys | Where-Object { -not $after.playerPrefs.Contains($_) })
-        $diff.playerPrefsChanged = @($prefChanges | Sort-Object -Unique)
+    # Verification is isolated: if it cannot complete, the lock is kept and Complete-KmldRun.ps1 finishes it
+    # (regression: run -r2 threw here and left the manifest unfinalized).
+    $verified = $false
+    try {
+        $diff = [ordered]@{}
+        if (Get-Variable before -ErrorAction SilentlyContinue) {
+            foreach ($k in 'saves', 'localLowTop', 'areas', 'mods', 'umm', 'gameRoot', 'streamingAssetsTop') { $diff[$k] = Compare-KmldManifest $before[$k] $after[$k] }
+            $prefChanges = @($after.playerPrefs.Keys | Where-Object { $before.playerPrefs[$_] -ne $after.playerPrefs[$_] }) + @($before.playerPrefs.Keys | Where-Object { -not $after.playerPrefs.Contains($_) })
+            $diff.playerPrefsChanged = @($prefChanges | Sort-Object -Unique)
+        }
+        $diff.steamAfter = Get-KmldSteamState
+        Write-KmldJson (Join-Path $runDir 'write-audit.json') $diff
+        if ($diff.Contains('saves') -and -not $diff.saves.unchanged) {
+            Write-KmldJson (Join-Path $script:KmldViolationDir "$RunId.json") ([ordered]@{ runId = $RunId; utc = (Get-Date).ToUniversalTime().ToString('o'); diff = $diff.saves; note = 'Blocking: owner review required before any further KMLD run.' })
+            Event 'PROTECTED-SAVE-VIOLATION' ($diff.saves | ConvertTo-Json -Compress)
+            $manifest.abort_or_blocker_reason = (@($manifest.abort_or_blocker_reason, 'protected save changed') | Where-Object { $_ }) -join ' | '
+        }
+        $verified = $diff.Contains('saves')
+    } catch {
+        Event 'post-run-verification-failed' $_.Exception.Message
+        $manifest.abort_or_blocker_reason = (@($manifest.abort_or_blocker_reason, ('post-run verification failed: ' + $_.Exception.Message)) | Where-Object { $_ }) -join ' | '
     }
-    $diff.steamAfter = Get-KmldSteamState
-    Write-KmldJson (Join-Path $runDir 'write-audit.json') $diff
-    if ($diff.Contains('saves') -and -not $diff.saves.unchanged) {
-        Write-KmldJson (Join-Path $script:KmldViolationDir "$RunId.json") ([ordered]@{ runId = $RunId; utc = (Get-Date).ToUniversalTime().ToString('o'); diff = $diff.saves; note = 'Blocking: owner review required before any further KMLD run.' })
-        Event 'PROTECTED-SAVE-VIOLATION' ($diff.saves | ConvertTo-Json -Compress)
-        $manifest.abort_or_blocker_reason = (@($manifest.abort_or_blocker_reason, 'protected save changed') | Where-Object { $_ }) -join ' | '
-    }
-    if (Test-Path -LiteralPath $script:KmldGameLog) { Copy-Item -LiteralPath $script:KmldGameLog -Destination (Join-Path $runDir 'output_log.this-run.txt') -Force }
+    try { if (Test-Path -LiteralPath $script:KmldGameLog) { Copy-Item -LiteralPath $script:KmldGameLog -Destination (Join-Path $runDir 'output_log.this-run.txt') -Force } } catch { Event 'log-copy-failed' $_.Exception.Message }
     $manifest.ended_utc = (Get-Date).ToUniversalTime().ToString('o')
     $manifest.elapsed_seconds = [Math]::Round($clock.Elapsed.TotalSeconds, 1)
     $manifest.workload_deviations += "close_method=$closeMethod"
-    $manifest.completion_status = if ($gameStillRunning) { 'incomplete-game-still-running' } elseif ($manifest.abort_or_blocker_reason) { 'aborted' } else { 'completed' }
+    $manifest.completion_status = if ($gameStillRunning) { 'incomplete-game-still-running' } elseif (-not $verified -and (Get-Variable before -ErrorAction SilentlyContinue)) { 'verification-pending' } elseif ($manifest.abort_or_blocker_reason) { 'aborted' } else { 'completed' }
     $manifest.artifact_paths_and_sha256 = @(Get-ChildItem -LiteralPath $runDir -File | Where-Object Name -ne 'manifest.json' | Sort-Object Name | ForEach-Object { [ordered]@{ path = $_.Name; bytes = $_.Length; sha256 = Get-KmldSha256 $_.FullName } })
     Save-Manifest
     if ($gameStillRunning) {
         Event 'lock-retained' 'game process still running; lock kept for recovery'
+    } elseif (-not $verified -and (Get-Variable before -ErrorAction SilentlyContinue)) {
+        Event 'lock-retained' 'protected-save verification incomplete; run scripts/Complete-KmldRun.ps1 -RunId'
     } elseif ($lockHeld) {
         [void](Remove-KmldLock $RunId $token); Remove-Item -LiteralPath (Join-Path $script:KmldStateDir 'kmld-runtime.lock.state.json') -ErrorAction SilentlyContinue
         Event 'lock-released'
