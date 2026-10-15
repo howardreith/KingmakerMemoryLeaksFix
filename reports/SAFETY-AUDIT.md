@@ -20,7 +20,7 @@ Final checks are re-run at the end of the mission; the "verified" column records
 | Fixes implemented | **none**. No game/mod/UMM file, save, cache, serialization or setting was changed by KMLD code; nothing calls `GC.Collect` or `UnloadUnusedAssets` |
 | Temporary instrumentation | none injected into the game (all observation external: process queries, `VirtualQueryEx`, bounded `ReadProcessMemory`, one window minimize in `-r4`) |
 | Unrelated projects | not modified: other `C:\Dev` labs were only read (docs, lease paths, the pre-existing ilspycmd); writes were confined to `C:\Dev\KingmakerMemoryLeakResearchLab`, the Claude memory folder for this project, and Python test temp dirs (auto-removed) |
-| Public upload / push | **none**. Branch `codex/kingmaker-memory-diagnostics` has local commits only; `origin` untouched. Two read-only web fetches (Owlcat profiler README, pinned KingmakerBugfixes source) |
+| Public upload / push | No push during the mission. **After the mission, at the owner's explicit request (2026-10-15), branch `codex/kingmaker-memory-diagnostics` was pushed to `origin` (public repository) and PR #1 opened.** Contents: scripts, tests, protocols and sanitized reports only; raw run data, save copies and decompiled code remain private and were not pushed. Two read-only web fetches during the mission (Owlcat profiler README, pinned KingmakerBugfixes source) |
 | Background tasks | all finished (run chains, monitors, sub-agents) |
 
 ## Exceptions and incidents (reported plainly)
