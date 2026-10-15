@@ -30,6 +30,9 @@ param(
     [long]$GameHeadroomBytes = 6GB,
     [switch]$PreflightOnly,
     [switch]$NoMemoryMaps,
+    # A launch opens a full-screen window on the console session. Refuse while someone is using it.
+    [int]$MinConsoleIdleMinutes = 15,
+    [switch]$AllowActiveConsole,
     [string]$ExpectedEnvironment = 'C:\Dev\KingmakerMemoryLeakResearchLab\repo\KingmakerMemoryLeaksFix\environment.json'
 )
 Set-StrictMode -Version Latest
@@ -94,6 +97,8 @@ if ($exeHash -ne $expectedExe) { $problems.Add('Kingmaker.exe hash differs from 
 $acsHash = Get-KmldSha256 (Join-Path $script:KmldGameRoot 'Kingmaker_Data\Managed\Assembly-CSharp.dll')
 $expectedAcs = ($expected.game.keyManagedAssemblies | Where-Object relativePath -like '*\Assembly-CSharp.dll').sha256
 if ($acsHash -ne $expectedAcs) { $problems.Add('Assembly-CSharp.dll hash differs from the recorded environment') }
+$idleMs = [Kmld.SystemInfo]::MillisecondsSinceLastInput()
+if (-not $AllowActiveConsole -and ($idleMs -lt 0 -or $idleMs -lt $MinConsoleIdleMinutes * 60000)) { $problems.Add("Console session input within the last $MinConsoleIdleMinutes min (idle $([math]::Round($idleMs/60000,1)) min); a launch would disrupt an active user") }
 $sys = [Kmld.SystemInfo]::Memory()
 $installed = $sys[3]
 $minAvail = [Math]::Max(2GB, [long]($installed * 0.10))
@@ -115,7 +120,7 @@ $prefs = Get-KmldPlayerPrefs
 $manifest.settings_hash = & $hashOf ($prefs.GetEnumerator() | ForEach-Object { [pscustomobject]@{ path = $_.Key; sha256 = $_.Value } }) $null
 $manifest.executable_hash = $exeHash
 $preflight = [ordered]@{ utc = (Get-Date).ToUniversalTime().ToString('o'); problems = @($problems); steam = $steam; appManifest = $app; foreignLeases = $leases
-    kingmakerRunning = @($running); assemblyCSharpSha256 = $acsHash; limits = $limits; modManifestHash = $manifest.mod_manifest_hash; settingsHash = $manifest.settings_hash; playerPrefs = $prefs }
+    kingmakerRunning = @($running); consoleIdleMs = $idleMs; assemblyCSharpSha256 = $acsHash; limits = $limits; modManifestHash = $manifest.mod_manifest_hash; settingsHash = $manifest.settings_hash; playerPrefs = $prefs }
 Write-KmldJson (Join-Path $runDir 'preflight.json') $preflight
 if ($problems.Count) {
     $manifest.completion_status = 'refused-preflight'; $manifest.abort_or_blocker_reason = ($problems -join ' | '); $manifest.ended_utc = (Get-Date).ToUniversalTime().ToString('o'); Save-Manifest
@@ -131,7 +136,7 @@ $token = [guid]::NewGuid().ToString('N')
 New-KmldLock $RunId $token
 Event 'lock-acquired' $script:KmldLockPath
 $lockHeld = $true
-$bound = $null; $samplerProc = $null; $watchdogProc = $null
+$bound = $null; $samplerProc = $null; $watchdogProc = $null; $launchUtc = $null
 $closeMethod = 'not-attempted'
 try {
     $leases = @(Get-KmldForeignLeases)
@@ -156,15 +161,18 @@ try {
     $game = $null
     $deadline = (Get-Date).AddSeconds(180)
     while ((Get-Date) -lt $deadline) {
-        $cands = @(Get-KmldGameProcesses | Where-Object { $_.CreationUtc -ge $launchUtc.AddSeconds(-5) })
+        $cands = @(Get-KmldLaunchedGames $launchUtc)
         if ($cands.Count -gt 1) { throw "More than one new Kingmaker process: $($cands.Pid -join ',')" }
         if ($cands.Count -eq 1) { $game = $cands[0]; break }
         Start-Sleep -Milliseconds 500
     }
     if (-not $game) { throw 'No Kingmaker process appeared within 180 s of the Steam launch' }
-    if ($game.Path -ine $script:KmldGameExe) { throw "Unexpected executable path: $($game.Path)" }
-    $creation = [Kmld.BoundProcess]::GetCreationTime($game.Pid)
+    $creation = $game.CreationFileTimeUtc
+    # Bind by handle immediately so every later error path can find and close this process.
     $bound = [Kmld.BoundProcess]::Bind($game.Pid, $creation, $true)
+    $imagePath = Resolve-KmldImagePath $game.Pid $creation 20
+    Event 'process-found' "pid=$($game.Pid) image=$imagePath"
+    if ($imagePath -ine $script:KmldGameExe) { throw "Unexpected or unreadable executable path for the launched process: '$imagePath'" }
     $manifest.process_pid = $game.Pid; $manifest.process_creation_time = [DateTime]::FromFileTimeUtc($creation).ToString('o'); Save-Manifest
     Write-KmldJson (Join-Path $script:KmldStateDir 'kmld-runtime.lock.state.json') ([ordered]@{ runId = $RunId; token = $token; gamePid = $game.Pid; gameCreationFileTimeUtc = $creation; gameImage = $bound.ImagePath; controllerPid = $PID; runDir = $runDir })
     Event 'process-bound' "pid=$($game.Pid) creation=$($manifest.process_creation_time)"
@@ -275,16 +283,20 @@ try {
 catch {
     Event 'controller-error' $_.Exception.Message
     $manifest.abort_or_blocker_reason = 'controller-error: ' + $_.Exception.Message
-    if ($bound -and -not $bound.HasExited) {
+    # Close whatever this run launched, bound or not (regression: kmld-w01menu-m0-r1 left an unbound process running).
+    $targets = @()
+    if ($bound -and -not $bound.HasExited) { $targets += [pscustomobject]@{ Pid = $bound.Pid; CreationFileTimeUtc = $bound.CreationFileTimeUtc } }
+    elseif ($launchUtc) { $targets += @(Get-KmldLaunchedGames $launchUtc) }
+    foreach ($t in $targets) {
         try {
-            $bound.VerifyIdentity(); $p = [Diagnostics.Process]::GetProcessById($bound.Pid)
-            if ($p.StartTime.ToUniversalTime().ToFileTimeUtc() -eq $bound.CreationFileTimeUtc) { [void]$p.CloseMainWindow(); if ($bound.WaitForExit(120000)) { $closeMethod = 'graceful-after-error' } }
+            $r = Close-KmldOwnedGame $t.Pid $t.CreationFileTimeUtc $script:KmldGameExe
+            $closeMethod = "after-error:$r"; Event 'close-after-error' "pid=$($t.Pid) result=$r"
         } catch { Event 'close-after-error-failed' $_.Exception.Message }
     }
 }
 finally {
     # ------------------------------------------------------------------ after snapshots + verification
-    $gameStillRunning = $bound -and -not $bound.HasExited
+    $gameStillRunning = ($bound -and -not $bound.HasExited) -or ($launchUtc -and @(Get-KmldLaunchedGames $launchUtc).Count -gt 0)
     Start-Sleep -Seconds 5   # let Steam write its exit cloud record
     $after = [ordered]@{
         saves = Get-KmldTreeManifest $script:KmldSaveDir

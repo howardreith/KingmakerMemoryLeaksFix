@@ -43,9 +43,50 @@ function Get-KmldSha256([string]$Path) {
     try { (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant() } catch { 'unreadable:' + $_.Exception.GetType().Name }
 }
 
-function Get-KmldGameProcesses {
-    @(Get-CimInstance Win32_Process -Filter "Name='Kingmaker.exe'" | ForEach-Object {
-        [pscustomobject]@{ Pid = [int]$_.ProcessId; Path = $_.ExecutablePath; CreationUtc = $_.CreationDate.ToUniversalTime() } })
+# Identity of every Kingmaker.exe process, read through a process handle (creation FILETIME and
+# QueryFullProcessImageName). Win32_Process.ExecutablePath is NOT used: it was observed empty for a
+# just-created Kingmaker.exe (incident kmld-w01menu-m0-r1). Path is $null when not yet readable.
+function Get-KmldGameProcesses([string]$Name = 'Kingmaker') {
+    @(Get-Process -Name $Name -ErrorAction SilentlyContinue | ForEach-Object {
+        $id = $_.Id; $path = $null; $creation = 0L
+        try { $b = [Kmld.BoundProcess]::Bind($id, 0, $false); try { $creation = $b.CreationFileTimeUtc; $path = $b.ImagePath } finally { $b.Dispose() } } catch { }
+        [pscustomobject]@{ Pid = $id; Path = $path; CreationFileTimeUtc = $creation
+            CreationUtc = if ($creation) { [DateTime]::FromFileTimeUtc($creation) } else { [DateTime]::MinValue } } })
+}
+
+# Kingmaker processes created at or after a launch time (5 s tolerance), i.e. candidates launched by this run.
+function Get-KmldLaunchedGames([DateTime]$LaunchUtc, [string]$Name = 'Kingmaker') {
+    @(Get-KmldGameProcesses $Name | Where-Object { $_.CreationFileTimeUtc -ne 0 -and $_.CreationUtc -ge $LaunchUtc.AddSeconds(-5) })
+}
+
+# Waits up to $Seconds for the image path of a bound candidate to become readable.
+function Resolve-KmldImagePath([int]$TargetPid, [long]$CreationFileTimeUtc, [int]$Seconds = 20) {
+    $deadline = (Get-Date).AddSeconds($Seconds)
+    while ((Get-Date) -lt $deadline) {
+        try { $b = [Kmld.BoundProcess]::Bind($TargetPid, $CreationFileTimeUtc, $false); try { if ($b.ImagePath) { return $b.ImagePath } } finally { $b.Dispose() } }
+        catch { return $null }
+        Start-Sleep -Milliseconds 250
+    }
+    return $null
+}
+
+# Graceful close of a launched process after identity revalidation; force only as a last resort.
+function Close-KmldOwnedGame([int]$TargetPid, [long]$CreationFileTimeUtc, [string]$ExpectedPath) {
+    $b = [Kmld.BoundProcess]::Bind($TargetPid, $CreationFileTimeUtc, $false)
+    try {
+        if ($b.HasExited) { return 'already-exited' }
+        if ($ExpectedPath -and $b.ImagePath -ine $ExpectedPath) { return "refused-path-mismatch:$($b.ImagePath)" }
+        $p = [Diagnostics.Process]::GetProcessById($TargetPid)
+        if ($p.StartTime.ToUniversalTime().ToFileTimeUtc() -ne $CreationFileTimeUtc) { return 'refused-identity-mismatch' }
+        [void]$p.CloseMainWindow()
+        if ($b.WaitForExit(120000)) { return 'graceful-wm-close' }
+        [void]$p.CloseMainWindow()
+        if ($b.WaitForExit(60000)) { return 'graceful-wm-close-retry' }
+        $b.VerifyIdentity()
+        Stop-Process -Id $TargetPid -Force
+        [void]$b.WaitForExit(30000)
+        return 'forced'
+    } finally { $b.Dispose() }
 }
 
 function Get-KmldForeignLeases {

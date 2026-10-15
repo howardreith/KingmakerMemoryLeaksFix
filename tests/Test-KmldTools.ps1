@@ -115,6 +115,27 @@ $mm = Write-KmldMemoryMap $b9 (Join-Path $root 't9') 'synthetic'
 $b9.Dispose(); Stop-Process -Id $c9.Id -ErrorAction SilentlyContinue
 Check 'memmap-census' ($mm.regionCount -gt 100 -and $mm.byTypeState.Contains('Private/Commit') -and $mm.byTypeState.Contains('Image/Commit')) "regions=$($mm.regionCount) ms=$($mm.queryMs)"
 
+# 10. Regression for incident kmld-w01menu-m0-r1: a just-launched process must be discoverable by
+#     handle (creation time + image path) and closable by the error path even before binding.
+$launch = (Get-Date).ToUniversalTime()
+$n1 = Start-Process notepad.exe -PassThru
+$found = @(); $deadline = (Get-Date).AddSeconds(10)
+while ((Get-Date) -lt $deadline -and -not $found.Count) { $found = @(Get-KmldLaunchedGames $launch 'notepad'); Start-Sleep -Milliseconds 100 }
+Check 'launched-process-found-by-handle' ($found.Count -ge 1 -and @($found.Pid) -contains $n1.Id) "found=$($found.Pid -join ',')"
+$np1 = $found | Where-Object Pid -eq $n1.Id | Select-Object -First 1
+$path = if ($np1) { Resolve-KmldImagePath $np1.Pid $np1.CreationFileTimeUtc 10 } else { $null }
+Check 'image-path-resolved-via-handle' ([bool]$path -and $path -like '*notepad.exe') "path=$path"
+Start-Sleep -Seconds 1
+$mis = if ($np1) { Close-KmldOwnedGame $np1.Pid $np1.CreationFileTimeUtc 'C:\not\the\game.exe' } else { 'no-target' }
+Check 'close-refuses-path-mismatch' ($mis -like 'refused-path-mismatch*' -and -not $n1.HasExited) $mis
+$wrongId = $false; try { [void](Close-KmldOwnedGame $n1.Id ($np1.CreationFileTimeUtc + 1) $path) } catch { $wrongId = $_.Exception.Message -match 'identity mismatch' }
+Check 'close-refuses-identity-mismatch' ($wrongId -and -not $n1.HasExited) ''
+$ok = if ($np1) { Close-KmldOwnedGame $np1.Pid $np1.CreationFileTimeUtc $path } else { 'no-target' }
+Check 'close-owned-graceful' ($ok -eq 'graceful-wm-close' -and $n1.HasExited) $ok
+Check 'launched-list-empty-after-close' (@(Get-KmldLaunchedGames $launch 'notepad' | Where-Object Pid -eq $n1.Id).Count -eq 0) ''
+$idle = [Kmld.SystemInfo]::MillisecondsSinceLastInput()
+Check 'console-idle-readable' ($idle -ge 0) "idleMs=$idle"
+
 $results | Export-Csv (Join-Path $root 'results.csv') -NoTypeInformation
 $fail = @($results | Where-Object { -not $_.pass }).Count
 "TOTAL: $($results.Count) tests, $fail failed. Output: $root"

@@ -211,6 +211,17 @@ namespace Kmld
         {
             ulong a, t, f; return GetDiskFreeSpaceEx(dir, out a, out t, out f) ? (long)a : -1;
         }
+
+        [StructLayout(LayoutKind.Sequential)] struct LASTINPUTINFO { public uint cbSize; public uint dwTime; }
+        [DllImport("user32.dll")] static extern bool GetLastInputInfo(ref LASTINPUTINFO lii);
+
+        // Milliseconds since the last keyboard/mouse input in the caller's session (no input content is read); -1 if unavailable.
+        public static long MillisecondsSinceLastInput()
+        {
+            var lii = new LASTINPUTINFO(); lii.cbSize = (uint)Marshal.SizeOf(typeof(LASTINPUTINFO));
+            if (!GetLastInputInfo(ref lii)) return -1;
+            return (long)unchecked((uint)Environment.TickCount - lii.dwTime);
+        }
     }
 
     // PDH query for per-process GPU memory counters. Instance names embed "pid_<pid>_".
