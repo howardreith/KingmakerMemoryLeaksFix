@@ -212,6 +212,20 @@ namespace Kmld
             ulong a, t, f; return GetDiskFreeSpaceEx(dir, out a, out t, out f) ? (long)a : -1;
         }
 
+        [DllImport("user32.dll")] static extern IntPtr GetForegroundWindow();
+        [DllImport("user32.dll")] static extern uint GetWindowThreadProcessId(IntPtr hwnd, out uint pid);
+        [DllImport("user32.dll")] static extern bool IsIconic(IntPtr hwnd);
+
+        // Passive window-state observation: 1 if the foreground window belongs to pid, else 0; -1 if unknown.
+        public static int IsForeground(int pid)
+        {
+            IntPtr fg = GetForegroundWindow(); if (fg == IntPtr.Zero) return -1;
+            uint fpid; GetWindowThreadProcessId(fg, out fpid); return fpid == (uint)pid ? 1 : 0;
+        }
+
+        // 1 if the given top-level window is minimized, 0 if not, -1 if no window handle.
+        public static int IsMinimized(IntPtr hwnd) { return hwnd == IntPtr.Zero ? -1 : (IsIconic(hwnd) ? 1 : 0); }
+
         [StructLayout(LayoutKind.Sequential)] struct LASTINPUTINFO { public uint cbSize; public uint dwTime; }
         [DllImport("user32.dll")] static extern bool GetLastInputInfo(ref LASTINPUTINFO lii);
 

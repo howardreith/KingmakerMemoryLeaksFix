@@ -71,9 +71,10 @@ try {
     Write-Status
 
     $writer = [IO.StreamWriter]::new($csvPath, $false, [Text.UTF8Encoding]::new($false))
-    $writer.WriteLine('run_id,timestamp_utc,elapsed_ms,pid,process_creation_time,cycle,phase,private_bytes,working_set_bytes,handle_count,thread_count,process_cpu_seconds,system_available_bytes,system_commit_bytes,system_commit_limit_bytes,capture_disk_free_bytes,gpu_dedicated_bytes,gpu_shared_bytes,pagefile_bytes,peak_working_set_bytes,page_fault_count,collector_private_bytes,sample_duration_ms,metric_status')
+    $writer.WriteLine('run_id,timestamp_utc,elapsed_ms,pid,process_creation_time,cycle,phase,private_bytes,working_set_bytes,handle_count,thread_count,process_cpu_seconds,system_available_bytes,system_commit_bytes,system_commit_limit_bytes,capture_disk_free_bytes,gpu_dedicated_bytes,gpu_shared_bytes,pagefile_bytes,peak_working_set_bytes,page_fault_count,collector_private_bytes,sample_duration_ms,game_foreground,game_minimized,console_idle_ms,metric_status')
     $sw = [Diagnostics.Stopwatch]::StartNew()
     $self = [Diagnostics.Process]::GetCurrentProcess()
+    $targetProc = [Diagnostics.Process]::GetProcessById($ProcessId)   # PID cannot be reused while $bp holds a handle
     $cycle = ''; $phase = ''; $next = 0L; $breached = $false
 
     while ($true) {
@@ -97,6 +98,7 @@ try {
         if ($null -eq $sys) { $notes.Add('system-memory:unavailable') }
         if ($disk -lt 0) { $notes.Add('disk:unavailable') }
         $self.Refresh()
+        $fg = [Kmld.SystemInfo]::IsForeground($ProcessId); $mn = -1; try { $targetProc.Refresh(); $mn = [Kmld.SystemInfo]::IsMinimized($targetProc.MainWindowHandle) } catch { }; $idleIn = [Kmld.SystemInfo]::MillisecondsSinceLastInput()
         $pb = ''; $ws = ''; $hc = ''; $tc = ''; $cpu = ''; $pf = ''; $pws = ''; $pfc = ''
         if ($s) {
             if ($s.MemoryOk) { $pb = $s.PrivateBytes; $ws = $s.WorkingSetBytes; $pf = $s.PagefileBytes; $pws = $s.PeakWorkingSetBytes; $pfc = $s.PageFaultCount }
@@ -110,7 +112,7 @@ try {
         if ($dur -gt $status.maxSampleDurationMs) { $status.maxSampleDurationMs = $dur }
         $metricStatus = if ($notes.Count) { ($notes -join '|') } else { 'ok' }
         $line = @($RunId, (Get-Date).ToUniversalTime().ToString('o'), $t0, $ProcessId, $creationIso, $cycle.Replace(',', ';'), $phase.Replace(',', ';'),
-            $pb, $ws, $hc, $tc, $cpu, $avail, $commit, $limit, ($(if ($disk -ge 0) { $disk } else { '' })), $gd, $gs, $pf, $pws, $pfc, $self.PrivateMemorySize64, $dur, $metricStatus) -join ','
+            $pb, $ws, $hc, $tc, $cpu, $avail, $commit, $limit, ($(if ($disk -ge 0) { $disk } else { '' })), $gd, $gs, $pf, $pws, $pfc, $self.PrivateMemorySize64, $dur, $fg, $mn, $idleIn, $metricStatus) -join ','
         $writer.WriteLine($line)
         $status.samples++
         if (($status.samples % 5) -eq 0) { $writer.Flush(); Write-Status }
