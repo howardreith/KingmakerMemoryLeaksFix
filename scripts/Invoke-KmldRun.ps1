@@ -33,6 +33,8 @@ param(
     # A launch opens a full-screen window on the console session. Refuse while someone is using it.
     [int]$MinConsoleIdleMinutes = 15,
     [switch]$AllowActiveConsole,
+    # Free-text record of who authorized this run (copied into the manifest).
+    [string]$AuthorizationNote = '',
     [string]$ExpectedEnvironment = 'C:\Dev\KingmakerMemoryLeakResearchLab\repo\KingmakerMemoryLeaksFix\environment.json'
 )
 Set-StrictMode -Version Latest
@@ -65,6 +67,7 @@ $manifest = [ordered]@{
     code_revision = $codeRevision; code_dirty = $codeDirty
     tool_versions_and_hashes = [ordered]@{ pwsh = $PSVersionTable.PSVersion.ToString()
         scripts = @('Invoke-KmldRun.ps1', 'KmldRuntime.Common.ps1', 'KmldNative.cs', 'Start-KmldSampler.ps1', 'Start-KmldWatchdog.ps1') | ForEach-Object { [ordered]@{ file = "scripts/$_"; sha256 = Get-KmldSha256 (Join-Path $PSScriptRoot $_) } } }
+    authorization_note = $AuthorizationNote; console_override = [bool]$AllowActiveConsole
     configuration_id = $ConfigurationId; mod_manifest_hash = $null; settings_hash = $null
     fixture_id = 'none (main menu; no save loaded)'; fixture_hash = $null; save_isolation_method = 'no save loaded; all save files hashed before/after; Steam offline + Sync Disabled proven'
     instrumentation_mode = 'none (external observation only)'; profiler_capture_mode = 'none'
