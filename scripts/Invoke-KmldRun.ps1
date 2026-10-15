@@ -158,6 +158,9 @@ try {
     Event 'snapshot-before-done' "saves=$(@($before.saves).Count)"
 
     # ------------------------------------------------------------------ launch via Steam
+    # The previous session's log is still in place until the new process truncates it; start reading at its
+    # end and accept markers only after the new log's first line (regression: pilot run kmld-w01menu-m0-r2).
+    $logStartOffset = if (Test-Path -LiteralPath $script:KmldGameLog) { (Get-Item -LiteralPath $script:KmldGameLog).Length } else { 0L }
     $launchUtc = (Get-Date).ToUniversalTime()
     Event 'launch' "steam://rungameid/$script:KmldAppId"
     Start-Process "steam://rungameid/$script:KmldAppId"
@@ -195,7 +198,8 @@ try {
     $manifest.tool_versions_and_hashes.samplerPid = $samplerProc.Id; $manifest.tool_versions_and_hashes.watchdogPid = $watchdogProc.Id
 
     # ------------------------------------------------------------------ workload
-    $logOffset = 0L
+    $logOffset = [long]$logStartOffset
+    $newLogStarted = $false
     $abort = $null
     $check = {
         if (Test-Path -LiteralPath $script:KmldCancelPath) { return 'cancel-file' }
@@ -211,6 +215,7 @@ try {
     $ready = $false
     while (-not $ready -and -not $abort) {
         foreach ($l in (Read-KmldAppendedLines $script:KmldGameLog ([ref]$logOffset))) {
+            if (-not $newLogStarted) { if ($l -match '^Initialize engine version') { $newLogStarted = $true; Event 'new-log-detected' $l }; continue }
             if ($l -match '^\[Manager\] FINISH\. SUCCESSFUL LOADED (\d+)/(\d+) MODS') { $milestones.modsLoaded = $l; Event 'umm-mods-loaded' $l }
             elseif ($l -match '^\[Manager\] FINISH') { $milestones.modsLoaded = $l; Event 'umm-mods-loaded-partial' $l }
             elseif ($l -match '^\[Manager\] Spawning\.') { $ready = $true; $milestones.mainMenuStart = (Get-Date).ToUniversalTime().ToString('o'); Event 'main-menu-ready' 'UMM [Manager] Spawning. (MainMenu.Start:After)' }
