@@ -1,0 +1,10 @@
+# Raw evidence, saves, captures and decompiled game code live in ../../private (outside this repo).
+# Defensive patterns in case anything is copied here by mistake:
+*.zks
+*.dmp
+*.etl
+private/
+run-data/
+captures/
+__pycache__/
+*.pyc
