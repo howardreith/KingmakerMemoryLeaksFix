@@ -70,3 +70,11 @@ Times are local (EDT, UTC−4) on 2026-10-15 unless stated. Only actions that ac
   (`Get-KmldReferrers.ps1`); synthetic mechanics tests (string extraction bug for odd alignment found and fixed). Tool suite 31/31.
 * `-r3`/`-r4` started 12:35 with `-ContentCensusAtEnd` (post-idle only; `-r4` also runs the referrer scan, commit `ff90875`).
   `-r3` readiness: 35 s after launch (new-log detection worked).
+* `-r3` (12:35–12:47): readiness 35 s after launch; **idle completely flat** (private slope 0.000 MiB/min, tail−head 0.10 MiB,
+  RMSE 0.05 MiB), CPU ≈ 27 % of one core, GPU dedicated 1,037 MiB (vs 788 MiB in `-r2`); started with PlayerPrefs `Use Native = 1`,
+  `ScreenResolution = 7` (written by `-r2`'s exit) whereas `-r2` started with `Use Native = 0`, `ScreenResolution = 8`. No new
+  4,198,400-byte allocations during idle. Graceful close, `completed`.
+* **Correction:** the post-idle content census of `-r3`'s 108 pre-existing 4,198,400-byte allocations found Unity native content
+  (frequent qwords pointing into `UnityPlayer.dll`; shader/constant-buffer names; `Assembly-CSharp.dll` ×5,168), not Mono objects.
+  The earlier "Boehm heap section" reading of this allocation size is withdrawn; these are Unity native-allocator blocks. The
+  Mono class-name heuristic produced only a spurious match ("ure") and is treated as unvalidated.
