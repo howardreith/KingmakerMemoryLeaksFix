@@ -40,6 +40,24 @@ member size limit and compression-ratio (zip-bomb) limit; structural scan counts
 spans); copy step keeps originals byte-identical and refuses destinations outside the lab; analysis leaves copies unchanged;
 corrupt archives reported, not raised.
 
+**Content census (`KmldContentCensus.cs`, `Get-KmldContentCensus.ps1`)** — reads sampled allocations of the bound process with
+`ReadProcessMemory` (identity re-checked by creation time; mismatch refused — tested); reading mechanics validated on a synthetic
+CoreCLR process (325 MiB read in 3.2 s, no read failures; pointer targets classified into image/private/mapped). String extraction
+validated on a known buffer (500/500 UTF-16 and ASCII markers; an odd-alignment miss was found and fixed). **The Mono class-name
+resolution (vtable → klass → (name, namespace)) cannot be validated on a non-Mono process**; its results are reported with the
+evidence used and treated as heuristic.
+
+**Referrer scan (`Get-KmldReferrers.ps1`)** — mechanics only (no crash, identity refusal). Attribution of hits to the nearest
+preceding Mono object header is **unvalidated** and can mis-attribute (free memory, large arrays beyond the 4 KiB back-window).
+Any owner it names must be corroborated by static code reading before being cited.
+
+**Window helper (`Set-KmldWindowState.ps1`)** — window-manager `ShowWindow(SW_SHOWMINNOACTIVE)` on the verified process's main
+window; not exercised synthetically (to avoid stealing focus during a measured run); its effect is observable in the sampler's
+`game_minimized` column.
+
+**Sampler window columns** — `game_foreground`, `game_minimized`, `console_idle_ms` verified on a hidden synthetic process
+(0 / −1 / idle ms as expected).
+
 ## Known limits of the tools
 
 * Thread counts come from a system-wide Toolhelp snapshot (≈20–45 ms per sample on this host); sample duration is recorded.

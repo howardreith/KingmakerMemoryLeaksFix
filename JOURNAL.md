@@ -57,3 +57,16 @@ Times are local (EDT, UTC−4) on 2026-10-15 unless stated. Only actions that ac
 * `-r2` logged `main-menu-ready` 2.9 s after launch from the **previous** session's log lines (defect). Fixed for later runs (commit
   `b8edd27`, before `-r3` started); `-r2` is kept as a pilot with the deviation recorded.
 * W01 signal criterion pre-declared and committed (`44e2f55`) before `-r3`/`-r4` data existed and before `-r2` samples were viewed.
+* `-r2` (12:18–12:29): graceful close (WM_CLOSE, exit 0), then the controller's verification threw on an empty manifest (`Areas`
+  folder empty) and left the lock held with the manifest unfinalized; no process left running. The chain stopped as designed.
+  Fixed (`Compare-KmldManifest` null/empty, verification isolated, lock kept on failure) and added `scripts/Complete-KmldRun.ps1`;
+  ran it for `-r2` (saves unchanged; `Mods` content identical with new timestamps; UMM/log writes; PlayerPrefs `ScreenResolution`
+  8→7 and `Use Native` 0→1 written by the game at exit) and the lock was released. Commit `f511b8d`.
+* `-r2` analysis: main-menu idle private bytes +157.2 MiB/min (early 156.1, late 158.5), working set +142.9 MiB/min, handles/threads/
+  GPU flat, CPU ≈ 12 % of one core, game log silent. Region census: growth is new committed `PAGE_READWRITE` private allocations of
+  exactly 4,198,400 bytes (159 in 5 min) plus one 128 MiB block; consistent with Boehm GC heap sections (`VirtualAlloc(bytes +
+  VIRTUAL_ALLOC_PAD)` in Unity's bdwgc source, current master — build-specific confirmation pending).
+* Built a bounded read-only content census (`KmldContentCensus.cs`, `Get-KmldContentCensus.ps1`) and a heuristic one-hop referrer scan
+  (`Get-KmldReferrers.ps1`); synthetic mechanics tests (string extraction bug for odd alignment found and fixed). Tool suite 31/31.
+* `-r3`/`-r4` started 12:35 with `-ContentCensusAtEnd` (post-idle only; `-r4` also runs the referrer scan, commit `ff90875`).
+  `-r3` readiness: 35 s after launch (new-log detection worked).
